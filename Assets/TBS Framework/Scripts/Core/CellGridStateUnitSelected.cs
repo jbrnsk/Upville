@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
 
 class CellGridStateUnitSelected : CellGridState
@@ -35,6 +36,8 @@ class CellGridStateUnitSelected : CellGridState
     }
     public override void OnUnitClicked(Unit unit)
     {
+        Debug.Log("We are doing this motherfucker", unit);
+    
         if (unit.Equals(_unit) || _unit.isMoving)
             return;
 
@@ -81,6 +84,7 @@ class CellGridStateUnitSelected : CellGridState
         _unitCell = _unit.Cell;
 
         _pathsInRange = _unit.GetAvailableDestinations(_cellGrid.Cells);
+        //_actionMenu = 
         var cellsNotInRange = _cellGrid.Cells.Except(_pathsInRange);
 
         foreach (var cell in cellsNotInRange)
