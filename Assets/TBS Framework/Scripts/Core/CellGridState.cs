@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using UnityEngine;
+using System.Linq;
 
 public abstract class CellGridState
 {
@@ -13,7 +14,7 @@ public abstract class CellGridState
     /// Method is called when a unit is clicked on.
     /// </summary>
     /// <param name="unit">Unit that was clicked.</param>
-    public virtual void OnUnitClicked(Unit unit)
+    public virtual void OnUnitClicked(Unit unit, GameObject activeUnitMenu = null)
     {
     }
     
@@ -52,6 +53,27 @@ public abstract class CellGridState
         {
             _cellGrid.CellGridState = new CellGridStateGameOver(_cellGrid);
         }
+    }
+
+    /// <summary>
+    /// Method is called when performing melee attack.
+    /// </summary>
+    public virtual void Melee()
+    {
+    }
+
+    /// <summary>
+    /// Method is called when performing ranged attack.
+    /// </summary>
+    public virtual void Ranged()
+    {
+    }
+
+    /// <summary>
+    /// Method is called when performing a taunt.
+    /// </summary>
+    public virtual void Taunt()
+    {
     }
 
     /// <summary>

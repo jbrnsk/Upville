@@ -184,13 +184,14 @@ public abstract class Unit : MonoBehaviour
     /// Method indicates if it is possible to attack unit given as parameter, 
     /// from cell given as second parameter.
     /// </summary>
-    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell)
+    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, int range = 1)
     {
-        if (sourceCell.GetDistance(other.Cell) <= AttackRange)
+        if (sourceCell.GetDistance(other.Cell) <= range)
             return true;
 
         return false;
     }
+
     /// <summary>
     /// Method deals damage to unit given as parameter.
     /// </summary>
@@ -200,7 +201,7 @@ public abstract class Unit : MonoBehaviour
             return;
         if (ActionPoints == 0)
             return;
-        if (!IsUnitAttackable(other, Cell))
+        if (!IsUnitAttackable(other, Cell, AttackRange))
             return;
 
         MarkAsAttacking(other);

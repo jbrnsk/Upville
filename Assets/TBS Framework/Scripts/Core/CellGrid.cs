@@ -36,6 +36,9 @@ public class CellGrid : MonoBehaviour
     public event EventHandler<UnitCreatedEventArgs> UnitAdded;
     
     private CellGridState _cellGridState; //The grid delegates some of its behaviours to cellGridState object.
+
+    public GameObject ActiveUnitMenu { get; private set; }
+
     public CellGridState CellGridState
     {
         private get
@@ -48,6 +51,7 @@ public class CellGrid : MonoBehaviour
                 _cellGridState.OnStateExit();
             _cellGridState = value;
             _cellGridState.OnStateEnter();
+            // _cellGridState._activeUnitMenu = _activeUnitMenu;
         }
     }
 
@@ -141,7 +145,7 @@ public class CellGrid : MonoBehaviour
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-        CellGridState.OnUnitClicked(sender as Unit);
+        CellGridState.OnUnitClicked(sender as Unit, ActiveUnitMenu);
     }
     private void OnUnitDestroyed(object sender, AttackEventArgs e)
     {
@@ -202,5 +206,29 @@ public class CellGrid : MonoBehaviour
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);     
+    }
+
+    /// <summary>
+    /// Method shows available units for melee attack.
+    /// </summary>
+    public void Melee()
+    {
+        _cellGridState.Melee();
+    }
+
+    /// <summary>
+    /// Method shows available units for melee attack.
+    /// </summary>
+    public void Ranged()
+    {
+        _cellGridState.Ranged();
+    }
+
+    /// <summary>
+    /// Method shows available units for melee attack.
+    /// </summary>
+    public void Taunt()
+    {
+        _cellGridState.Taunt();
     }
 }

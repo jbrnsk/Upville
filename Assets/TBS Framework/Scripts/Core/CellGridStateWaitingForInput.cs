@@ -6,7 +6,7 @@ class CellGridStateWaitingForInput : CellGridState
     {
     }
 
-    public override void OnUnitClicked(Unit unit)
+    public override void OnUnitClicked(Unit unit, GameObject _activeUnitMenu = null)
     {
         Debug.Log("unit", unit);
         if(unit.PlayerNumber.Equals(_cellGrid.CurrentPlayerNumber))

@@ -7,6 +7,7 @@ class CellGridStateUnitSelected : CellGridState
     private Unit _unit;
     private HashSet<Cell> _pathsInRange;
     private List<Unit> _unitsInRange;
+    private GameObject _activeUnitMenu;
 
     private Cell _unitCell;
 
@@ -34,10 +35,9 @@ class CellGridStateUnitSelected : CellGridState
         _unit.Move(cell,path);
         _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, _unit);
     }
-    public override void OnUnitClicked(Unit unit)
+    public override void OnUnitClicked(Unit unit, GameObject unitMenu)
     {
-        Debug.Log("We are doing this motherfucker", unit);
-    
+  
         if (unit.Equals(_unit) || _unit.isMoving)
             return;
 
@@ -49,7 +49,10 @@ class CellGridStateUnitSelected : CellGridState
 
         if (unit.PlayerNumber.Equals(_unit.PlayerNumber))
         {
+            Debug.Log("Loggity log", unitMenu);
             _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, unit);
+            // unitMenu.SetActive(true);
+            Object.Destroy(unitMenu);
         }
             
     }
@@ -84,7 +87,7 @@ class CellGridStateUnitSelected : CellGridState
         _unitCell = _unit.Cell;
 
         _pathsInRange = _unit.GetAvailableDestinations(_cellGrid.Cells);
-        //_actionMenu = 
+
         var cellsNotInRange = _cellGrid.Cells.Except(_pathsInRange);
 
         foreach (var cell in cellsNotInRange)
@@ -97,18 +100,6 @@ class CellGridStateUnitSelected : CellGridState
         }
 
         if (_unit.ActionPoints <= 0) return;
-
-        foreach (var currentUnit in _cellGrid.Units)
-        {
-            if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
-                continue;
-        
-            if (_unit.IsUnitAttackable(currentUnit,_unit.Cell))
-            {
-                currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
-                _unitsInRange.Add(currentUnit);
-            }
-        }
         
         if (_unitCell.GetNeighbours(_cellGrid.Cells).FindAll(c => c.MovementCost <= _unit.MovementPoints).Count == 0 
             && _unitsInRange.Count == 0)
@@ -126,6 +117,40 @@ class CellGridStateUnitSelected : CellGridState
         {
             cell.UnMark();
         }   
+    }
+
+     public override void Melee() {
+        foreach (var currentUnit in _cellGrid.Units)
+        {
+            if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
+                continue;
+        
+            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, 1))
+            {
+                currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
+                _unitsInRange.Add(currentUnit);
+            }
+        }
+     }
+
+    public override void Ranged()
+    {
+        foreach (var currentUnit in _cellGrid.Units)
+        {
+            if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
+                continue;
+        
+            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, 4))
+            {
+                currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
+                _unitsInRange.Add(currentUnit);
+            }
+        }
+    }
+
+    public override void Taunt()
+    {
+        Debug.Log("GET OUT OF HERE VICTOR");
     }
 }
 
