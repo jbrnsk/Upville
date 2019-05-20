@@ -84,6 +84,10 @@ public abstract class Unit : MonoBehaviour
     /// Determines how many attacks unit can perform in one turn.
     /// </summary>
     public int ActionPoints;
+    /// <summary>
+    /// The object that contains the interactable actions that this unit can perform.
+    /// </summary>
+    public GameObject ActionMenu;
 
     /// <summary>
     /// Indicates the player that the unit belongs to. 
@@ -166,15 +170,22 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
+        ActionMenu.SetActive(true);
+
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
+        {
             UnitSelected.Invoke(this, new EventArgs());
+        }
+            
     }
     /// <summary>
     /// Method is called when unit is deselected.
     /// </summary>
     public virtual void OnUnitDeselected()
     {
+        ActionMenu.SetActive(false);
+
         SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)
             UnitDeselected.Invoke(this, new EventArgs());
@@ -201,8 +212,8 @@ public abstract class Unit : MonoBehaviour
             return;
         if (ActionPoints == 0)
             return;
-        if (!IsUnitAttackable(other, Cell, AttackRange))
-            return;
+        // if (!IsUnitAttackable(other, Cell, AttackRange))
+        //     return;
 
         MarkAsAttacking(other);
         ActionPoints--;

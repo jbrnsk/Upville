@@ -35,9 +35,8 @@ class CellGridStateUnitSelected : CellGridState
         _unit.Move(cell,path);
         _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, _unit);
     }
-    public override void OnUnitClicked(Unit unit, GameObject unitMenu)
+    public override void OnUnitClicked(Unit unit)
     {
-  
         if (unit.Equals(_unit) || _unit.isMoving)
             return;
 
@@ -49,10 +48,7 @@ class CellGridStateUnitSelected : CellGridState
 
         if (unit.PlayerNumber.Equals(_unit.PlayerNumber))
         {
-            Debug.Log("Loggity log", unitMenu);
             _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, unit);
-            // unitMenu.SetActive(true);
-            Object.Destroy(unitMenu);
         }
             
     }

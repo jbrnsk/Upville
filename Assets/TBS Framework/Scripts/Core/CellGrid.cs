@@ -37,7 +37,7 @@ public class CellGrid : MonoBehaviour
     
     private CellGridState _cellGridState; //The grid delegates some of its behaviours to cellGridState object.
 
-    public GameObject ActiveUnitMenu { get; private set; }
+    public GameObject ActiveUnitMenu;
 
     public CellGridState CellGridState
     {
@@ -145,7 +145,7 @@ public class CellGrid : MonoBehaviour
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-        CellGridState.OnUnitClicked(sender as Unit, ActiveUnitMenu);
+        CellGridState.OnUnitClicked(sender as Unit);
     }
     private void OnUnitDestroyed(object sender, AttackEventArgs e)
     {

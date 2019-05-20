@@ -14,7 +14,7 @@ public abstract class CellGridState
     /// Method is called when a unit is clicked on.
     /// </summary>
     /// <param name="unit">Unit that was clicked.</param>
-    public virtual void OnUnitClicked(Unit unit, GameObject activeUnitMenu = null)
+    public virtual void OnUnitClicked(Unit unit)
     {
     }
     
