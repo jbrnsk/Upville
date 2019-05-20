@@ -68,6 +68,9 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public Cell Cell { get; set; }
 
+    public float ActionSpeed;
+    private float targetTime;
+    public bool isReady = false;
     public int HitPoints;
     public int AttackRange;
     public int AttackFactor;
@@ -115,6 +118,29 @@ public abstract class Unit : MonoBehaviour
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
+        targetTime = ActionSpeed;
+    }
+ 
+    void Update(){
+        if (isReady) 
+        {
+            return;
+        }
+
+        targetTime -= Time.deltaTime;
+ 
+        if (targetTime <= 0.0f)
+        {
+            timerEnded();
+        }
+    }
+ 
+    void timerEnded()
+    {
+        Debug.Log("Target time is reached");
+        targetTime = ActionSpeed;
+        isReady = true;
+        OnTurnStart();
     }
 
     protected virtual void OnMouseDown()
@@ -138,6 +164,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnTurnStart()
     {
+        Debug.Log("Critical function: Unit - OnTurnStart");
         MovementPoints = TotalMovementPoints;
         ActionPoints = TotalActionPoints;
 

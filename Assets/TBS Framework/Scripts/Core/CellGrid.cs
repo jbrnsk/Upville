@@ -97,7 +97,7 @@ public class CellGrid : MonoBehaviour
                 Debug.LogError("Invalid object in Players Parent game object");
         }
         NumberOfPlayers = Players.Count;
-        CurrentPlayerNumber = Players.Min(p => p.PlayerNumber);
+        CurrentPlayerNumber = 1; // Players.Min(p => p.PlayerNumber);
 
         Cells = new List<Cell>();
         for (int i = 0; i < transform.childCount; i++)
@@ -106,7 +106,7 @@ public class CellGrid : MonoBehaviour
             if (cell != null)
                 Cells.Add(cell);
             else
-                Debug.LogError("Invalid object in cells paretn game object");
+                Debug.LogError("Invalid object in cells parent game object");
         }
 
         foreach (var cell in Cells)
@@ -179,8 +179,9 @@ public class CellGrid : MonoBehaviour
         if(GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
 
-        Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
-        Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
+        // Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
+        // Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
+        Players.ForEach(u => { u.Play(this); });
     }
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.

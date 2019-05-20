@@ -31,6 +31,11 @@ public class NaiveAiPlayer : Player
         var myUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(PlayerNumber)).ToList();
         foreach (var unit in myUnits.OrderByDescending(u => u.Cell.GetNeighbours(_cellGrid.Cells).FindAll(u.IsCellTraversable).Count))
         {
+            if(!unit.isReady) 
+            {
+                continue;
+            }
+
             var enemyUnits = _cellGrid.Units.Except(myUnits).ToList();
             var unitsInRange = new List<Unit>();
             foreach (var enemyUnit in enemyUnits)
@@ -111,6 +116,6 @@ public class NaiveAiPlayer : Player
                 }
             }//Look for enemies in range and attack.
         }    
-        _cellGrid.EndTurn();     
+        _cellGrid.EndTurn();   
     }
 }
