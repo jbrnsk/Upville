@@ -9,7 +9,6 @@ public  class UnitAbility : MonoBehaviour
 
     public int AttackFactor;
     public int AttackRange;
-    public bool IsInteractable;
 
     protected Unit _unit;
 

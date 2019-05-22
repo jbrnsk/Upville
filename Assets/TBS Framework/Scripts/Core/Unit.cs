@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -277,7 +278,7 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Moves the unit to destinationCell along the path.
     /// </summary>
-    public virtual void Move(Cell destinationCell, List<Cell> path)
+    public virtual void Move(Cell destinationCell, List<Cell> path, CellGrid cellGrid)
     {
         if (isMoving)
             return;
@@ -293,7 +294,7 @@ public abstract class Unit : MonoBehaviour
         destinationCell.IsTaken = true;
 
         if (MovementSpeed > 0)
-            StartCoroutine(MovementAnimation(path));
+            StartCoroutine(MovementAnimation(path, cellGrid));
         else
             transform.position = Cell.transform.position;
 
@@ -301,7 +302,7 @@ public abstract class Unit : MonoBehaviour
             UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));   
         }
     }
-    protected virtual IEnumerator MovementAnimation(List<Cell> path)
+    protected virtual IEnumerator MovementAnimation(List<Cell> path, CellGrid cellGrid)
     {
         isMoving = true;
         path.Reverse();
@@ -314,10 +315,37 @@ public abstract class Unit : MonoBehaviour
                 yield return 0;
             }
         }
+        
+        // Set appropriate abilities as interactable. FIND ME
+        Debug.Log("Das action menu ist hier");
+        Debug.Log(ActionMenu);
+
+        foreach(Transform child in ActionMenu.transform)
+        {
+            Debug.Log("It's a child");
+            Debug.Log(child.gameObject);
+            UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
+            Button button = (Button)child.gameObject.GetComponent("Button");
+            int attackRange = unitAbility.AttackRange;
+            bool hasUnitInRange = false;
+            Debug.Log(attackRange);
+
+            foreach (var currentUnit in cellGrid.Units)
+            {
+                if (currentUnit.PlayerNumber.Equals(PlayerNumber))
+                    continue;
+            
+                if (IsUnitAttackable(currentUnit, Cell, attackRange))
+                {
+                    hasUnitInRange = true;
+                    break;
+                }
+            }
+
+            button.interactable = hasUnitInRange;
+        }
+
         isMoving = false;
-        
-        // Set appropriate abilities as interactable.
-        
     }
 
     ///<summary>

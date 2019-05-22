@@ -32,7 +32,7 @@ class CellGridStateUnitSelected : CellGridState
         }
             
         var path = _unit.FindPath(_cellGrid.Cells, cell);
-        _unit.Move(cell,path);
+        _unit.Move(cell,path,_cellGrid);
         _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, _unit);
     }
     public override void OnUnitClicked(Unit unit)

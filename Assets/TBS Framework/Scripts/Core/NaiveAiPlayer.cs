@@ -79,7 +79,7 @@ public class NaiveAiPlayer : Player
                 var pathCost = path.Sum(h => h.MovementCost);
                 if (pathCost > 0 && pathCost <= unit.MovementPoints)
                 {
-                    unit.Move(potentialDestination, path);
+                    unit.Move(potentialDestination, path, _cellGrid);
                     while (unit.isMoving)
                         yield return 0;
                     shortestPath = null;
@@ -96,7 +96,7 @@ public class NaiveAiPlayer : Player
                     var pathCost = path.Sum(h => h.MovementCost);
                     if (pathCost > 0 && pathCost <= unit.MovementPoints)
                     {
-                        unit.Move(potentialDestination, path);
+                        unit.Move(potentialDestination, path, _cellGrid);
                         while (unit.isMoving)
                             yield return 0;
                         break;
