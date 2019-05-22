@@ -316,19 +316,13 @@ public abstract class Unit : MonoBehaviour
             }
         }
         
-        // Set appropriate abilities as interactable. FIND ME
-        Debug.Log("Das action menu ist hier");
-        Debug.Log(ActionMenu);
-
+        // Set ability buttons as interactable based on whether or not enemies in range. 
         foreach(Transform child in ActionMenu.transform)
         {
-            Debug.Log("It's a child");
-            Debug.Log(child.gameObject);
             UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
             Button button = (Button)child.gameObject.GetComponent("Button");
             int attackRange = unitAbility.AttackRange;
             bool hasUnitInRange = false;
-            Debug.Log(attackRange);
 
             foreach (var currentUnit in cellGrid.Units)
             {
