@@ -115,31 +115,18 @@ class CellGridStateUnitSelected : CellGridState
         }   
     }
 
-     public override void Melee() {
-        foreach (var currentUnit in _cellGrid.Units)
-        {
-            if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
-                continue;
-        
-            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, 1))
-            {
-                currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
-                _unitsInRange.Add(currentUnit);
-            }
-        }
-     }
-
-    public override void Ranged()
+    public override void UnitAbility(int attackFactor, int attackRange)
     {
         foreach (var currentUnit in _cellGrid.Units)
         {
             if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
                 continue;
         
-            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, 4))
+            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, attackRange))
             {
                 currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
                 _unitsInRange.Add(currentUnit);
+                _unit.AttackFactor = attackFactor;
             }
         }
     }

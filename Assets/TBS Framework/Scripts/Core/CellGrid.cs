@@ -212,24 +212,18 @@ public class CellGrid : MonoBehaviour
     /// <summary>
     /// Method shows available units for melee attack.
     /// </summary>
-    public void Melee()
-    {
-        _cellGridState.Melee();
-    }
-
-    /// <summary>
-    /// Method shows available units for melee attack.
-    /// </summary>
-    public void Ranged()
-    {
-        _cellGridState.Ranged();
-    }
-
-    /// <summary>
-    /// Method shows available units for melee attack.
-    /// </summary>
     public void Taunt()
     {
         _cellGridState.Taunt();
+    }
+
+    /// <summary>
+    /// Method shows available units for melee attack.
+    /// </summary>
+    public void UnitAbility(UnitAbility selectedunit)
+    {
+        int attackRange = selectedunit.AttackRange;
+        int attackFactor = selectedunit.AttackFactor;
+        _cellGridState.UnitAbility(attackFactor, attackRange);
     }
 }

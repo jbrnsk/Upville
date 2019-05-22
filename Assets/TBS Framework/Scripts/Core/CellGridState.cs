@@ -58,14 +58,7 @@ public abstract class CellGridState
     /// <summary>
     /// Method is called when performing melee attack.
     /// </summary>
-    public virtual void Melee()
-    {
-    }
-
-    /// <summary>
-    /// Method is called when performing ranged attack.
-    /// </summary>
-    public virtual void Ranged()
+    public virtual void UnitAbility(int attackFactor, int attackRange)
     {
     }
 

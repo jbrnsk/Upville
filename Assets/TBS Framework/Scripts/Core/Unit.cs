@@ -239,6 +239,8 @@ public abstract class Unit : MonoBehaviour
             return;
         if (ActionPoints == 0)
             return;
+
+        // Commenting this out may create bugs.
         // if (!IsUnitAttackable(other, Cell, AttackRange))
         //     return;
 
@@ -295,8 +297,9 @@ public abstract class Unit : MonoBehaviour
         else
             transform.position = Cell.transform.position;
 
-        if (UnitMoved != null)
-            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
+        if (UnitMoved != null){
+            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));   
+        }
     }
     protected virtual IEnumerator MovementAnimation(List<Cell> path)
     {
@@ -312,6 +315,9 @@ public abstract class Unit : MonoBehaviour
             }
         }
         isMoving = false;
+        
+        // Set appropriate abilities as interactable.
+        
     }
 
     ///<summary>
