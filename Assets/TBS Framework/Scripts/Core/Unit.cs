@@ -316,6 +316,11 @@ public abstract class Unit : MonoBehaviour
             }
         }
         
+        if(!ActionMenu) {
+            isMoving = false;
+            yield break;
+        }
+
         // Set ability buttons as interactable based on whether or not enemies in range. 
         foreach(Transform child in ActionMenu.transform)
         {
