@@ -165,7 +165,6 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnTurnStart()
     {
-        Debug.Log("Critical function: Unit - OnTurnStart");
         MovementPoints = TotalMovementPoints;
         ActionPoints = TotalActionPoints;
 
