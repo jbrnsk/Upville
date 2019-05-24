@@ -220,10 +220,10 @@ public class CellGrid : MonoBehaviour
     /// <summary>
     /// Method shows available units for melee attack.
     /// </summary>
-    public void UnitAbility(UnitAbility selectedunit)
+    public void UnitAbility(UnitAbility selectedUnitAbility)
     {
-        int attackRange = selectedunit.AttackRange;
-        int attackFactor = selectedunit.AttackFactor;
+        int attackRange = selectedUnitAbility.AttackRange;
+        int attackFactor = selectedUnitAbility.AttackFactor;
         _cellGridState.UnitAbility(attackFactor, attackRange);
     }
 }

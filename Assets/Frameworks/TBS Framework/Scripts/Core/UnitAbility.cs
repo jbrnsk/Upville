@@ -10,11 +10,8 @@ public  class UnitAbility : MonoBehaviour
     public int AttackFactor;
     public int AttackRange;
 
-    protected Unit _unit;
-
-    public UnitAbility(Unit unit)
+    public UnitAbility()
     {
-        _unit = unit;
     }
 }
 

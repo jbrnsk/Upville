@@ -27,10 +27,14 @@ public class Hero : MyUnit
         {
             Invoke("EnableSpecialAbilityButton",0.1f);
         }       
+
+        ActionMenu.SetActive(true);
     }
     public override void OnUnitDeselected()
     {
         _specialAbilityButton.gameObject.SetActive(false);
+
+        ActionMenu.SetActive(false);
     }
 
     private void EnableSpecialAbilityButton() 
