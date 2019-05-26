@@ -37,7 +37,7 @@ public class CellGrid : MonoBehaviour
     
     private CellGridState _cellGridState; //The grid delegates some of its behaviours to cellGridState object.
 
-    public GameObject ActiveUnitMenu { get; private set; }
+    public GameObject ActiveUnitMenu;
 
     public CellGridState CellGridState
     {
@@ -97,7 +97,7 @@ public class CellGrid : MonoBehaviour
                 Debug.LogError("Invalid object in Players Parent game object");
         }
         NumberOfPlayers = Players.Count;
-        CurrentPlayerNumber = Players.Min(p => p.PlayerNumber);
+        CurrentPlayerNumber = 1; // Players.Min(p => p.PlayerNumber);
 
         Cells = new List<Cell>();
         for (int i = 0; i < transform.childCount; i++)
@@ -106,7 +106,7 @@ public class CellGrid : MonoBehaviour
             if (cell != null)
                 Cells.Add(cell);
             else
-                Debug.LogError("Invalid object in cells paretn game object");
+                Debug.LogError("Invalid object in cells parent game object");
         }
 
         foreach (var cell in Cells)
@@ -145,7 +145,7 @@ public class CellGrid : MonoBehaviour
 
     private void OnUnitClicked(object sender, EventArgs e)
     {
-        CellGridState.OnUnitClicked(sender as Unit, ActiveUnitMenu);
+        CellGridState.OnUnitClicked(sender as Unit);
     }
     private void OnUnitDestroyed(object sender, AttackEventArgs e)
     {
@@ -181,6 +181,7 @@ public class CellGrid : MonoBehaviour
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
+        // Players.ForEach(u => { u.Play(this); });
     }
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.
@@ -211,24 +212,18 @@ public class CellGrid : MonoBehaviour
     /// <summary>
     /// Method shows available units for melee attack.
     /// </summary>
-    public void Melee()
-    {
-        _cellGridState.Melee();
-    }
-
-    /// <summary>
-    /// Method shows available units for melee attack.
-    /// </summary>
-    public void Ranged()
-    {
-        _cellGridState.Ranged();
-    }
-
-    /// <summary>
-    /// Method shows available units for melee attack.
-    /// </summary>
     public void Taunt()
     {
         _cellGridState.Taunt();
+    }
+
+    /// <summary>
+    /// Method shows available units for melee attack.
+    /// </summary>
+    public void UnitAbility(UnitAbility selectedUnitAbility)
+    {
+        int attackRange = selectedUnitAbility.AttackRange;
+        int attackFactor = selectedUnitAbility.AttackFactor;
+        _cellGridState.UnitAbility(attackFactor, attackRange);
     }
 }

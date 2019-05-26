@@ -15,17 +15,17 @@ public class FlyingAlien : Alien
         return !(cell as MyOtherHexagon).IsSkyTaken;//Allows unit to move through any cell that is not occupied by a flying unit.
     }
 
-    public override void Move(Cell destinationCell, List<Cell> path)
+    public override void Move(Cell destinationCell, List<Cell> path, CellGrid cellgrid)
     {
         (Cell as MyOtherHexagon).IsSkyTaken = false;
         (destinationCell as MyOtherHexagon).IsSkyTaken = true;
-        base.Move(destinationCell, path);      
+        base.Move(destinationCell, path, cellgrid);      
     }
 
-    protected override IEnumerator MovementAnimation(List<Cell> path)
+    protected override IEnumerator MovementAnimation(List<Cell> path, CellGrid cellGrid)
     {
         GetComponent<SpriteRenderer>().sortingOrder = 6;
-        yield return StartCoroutine(base.MovementAnimation(path));
+        yield return StartCoroutine(base.MovementAnimation(path, cellGrid));
         GetComponent<SpriteRenderer>().sortingOrder = 3;
     }
 

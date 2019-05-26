@@ -14,7 +14,7 @@ public abstract class CellGridState
     /// Method is called when a unit is clicked on.
     /// </summary>
     /// <param name="unit">Unit that was clicked.</param>
-    public virtual void OnUnitClicked(Unit unit, GameObject activeUnitMenu = null)
+    public virtual void OnUnitClicked(Unit unit)
     {
     }
     
@@ -58,14 +58,7 @@ public abstract class CellGridState
     /// <summary>
     /// Method is called when performing melee attack.
     /// </summary>
-    public virtual void Melee()
-    {
-    }
-
-    /// <summary>
-    /// Method is called when performing ranged attack.
-    /// </summary>
-    public virtual void Ranged()
+    public virtual void UnitAbility(int attackFactor, int attackRange)
     {
     }
 

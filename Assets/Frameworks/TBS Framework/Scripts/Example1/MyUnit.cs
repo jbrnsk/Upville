@@ -27,9 +27,9 @@ public class MyUnit : Unit
         UpdateHpBar();
     }
 
-    public override void Move(Cell destinationCell, List<Cell> path)
+    public override void Move(Cell destinationCell, List<Cell> path, CellGrid cellGrid)
     {
-        base.Move(destinationCell, path);
+        base.Move(destinationCell, path, cellGrid);
     }
 
     public override void MarkAsAttacking(Unit other)

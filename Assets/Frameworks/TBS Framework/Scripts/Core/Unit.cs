@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,9 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public Cell Cell { get; set; }
 
+    public float ActionSpeed;
+    private float targetTime;
+    public bool isReady = false;
     public int HitPoints;
     public int AttackRange;
     public int AttackFactor;
@@ -84,6 +88,10 @@ public abstract class Unit : MonoBehaviour
     /// Determines how many attacks unit can perform in one turn.
     /// </summary>
     public int ActionPoints;
+    /// <summary>
+    /// The object that contains the interactable actions that this unit can perform.
+    /// </summary>
+    public GameObject ActionMenu;
 
     /// <summary>
     /// Indicates the player that the unit belongs to. 
@@ -111,6 +119,29 @@ public abstract class Unit : MonoBehaviour
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
+        targetTime = ActionSpeed;
+    }
+ 
+    void Update(){
+        if (isReady) 
+        {
+            return;
+        }
+
+        targetTime -= Time.deltaTime;
+ 
+        if (targetTime <= 0.0f)
+        {
+            timerEnded();
+        }
+    }
+ 
+    void timerEnded()
+    {
+        Debug.Log("Target time is reached");
+        targetTime = ActionSpeed;
+        isReady = true;
+        OnTurnStart();
     }
 
     protected virtual void OnMouseDown()
@@ -166,15 +197,22 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
+        ActionMenu.SetActive(true);
+
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
+        {
             UnitSelected.Invoke(this, new EventArgs());
+        }
+            
     }
     /// <summary>
     /// Method is called when unit is deselected.
     /// </summary>
     public virtual void OnUnitDeselected()
     {
+        ActionMenu.SetActive(false);
+
         SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)
             UnitDeselected.Invoke(this, new EventArgs());
@@ -201,8 +239,10 @@ public abstract class Unit : MonoBehaviour
             return;
         if (ActionPoints == 0)
             return;
-        if (!IsUnitAttackable(other, Cell, AttackRange))
-            return;
+
+        // Commenting this out may create bugs.
+        // if (!IsUnitAttackable(other, Cell, AttackRange))
+        //     return;
 
         MarkAsAttacking(other);
         ActionPoints--;
@@ -237,7 +277,7 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Moves the unit to destinationCell along the path.
     /// </summary>
-    public virtual void Move(Cell destinationCell, List<Cell> path)
+    public virtual void Move(Cell destinationCell, List<Cell> path, CellGrid cellGrid)
     {
         if (isMoving)
             return;
@@ -253,14 +293,15 @@ public abstract class Unit : MonoBehaviour
         destinationCell.IsTaken = true;
 
         if (MovementSpeed > 0)
-            StartCoroutine(MovementAnimation(path));
+            StartCoroutine(MovementAnimation(path, cellGrid));
         else
             transform.position = Cell.transform.position;
 
-        if (UnitMoved != null)
-            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
+        if (UnitMoved != null){
+            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));   
+        }
     }
-    protected virtual IEnumerator MovementAnimation(List<Cell> path)
+    protected virtual IEnumerator MovementAnimation(List<Cell> path, CellGrid cellGrid)
     {
         isMoving = true;
         path.Reverse();
@@ -273,6 +314,35 @@ public abstract class Unit : MonoBehaviour
                 yield return 0;
             }
         }
+        
+        if(!ActionMenu) {
+            isMoving = false;
+            yield break;
+        }
+
+        // Set ability buttons as interactable based on whether or not enemies in range. 
+        foreach(Transform child in ActionMenu.transform)
+        {
+            UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
+            Button button = (Button)child.gameObject.GetComponent("Button");
+            int attackRange = unitAbility.AttackRange;
+            bool hasUnitInRange = false;
+
+            foreach (var currentUnit in cellGrid.Units)
+            {
+                if (currentUnit.PlayerNumber.Equals(PlayerNumber))
+                    continue;
+            
+                if (IsUnitAttackable(currentUnit, Cell, attackRange))
+                {
+                    hasUnitInRange = true;
+                    break;
+                }
+            }
+
+            button.interactable = hasUnitInRange;
+        }
+
         isMoving = false;
     }
 

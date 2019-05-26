@@ -32,12 +32,11 @@ class CellGridStateUnitSelected : CellGridState
         }
             
         var path = _unit.FindPath(_cellGrid.Cells, cell);
-        _unit.Move(cell,path);
+        _unit.Move(cell,path,_cellGrid);
         _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, _unit);
     }
-    public override void OnUnitClicked(Unit unit, GameObject unitMenu)
+    public override void OnUnitClicked(Unit unit)
     {
-  
         if (unit.Equals(_unit) || _unit.isMoving)
             return;
 
@@ -49,10 +48,7 @@ class CellGridStateUnitSelected : CellGridState
 
         if (unit.PlayerNumber.Equals(_unit.PlayerNumber))
         {
-            Debug.Log("Loggity log", unitMenu);
             _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, unit);
-            // unitMenu.SetActive(true);
-            Object.Destroy(unitMenu);
         }
             
     }
@@ -119,31 +115,18 @@ class CellGridStateUnitSelected : CellGridState
         }   
     }
 
-     public override void Melee() {
-        foreach (var currentUnit in _cellGrid.Units)
-        {
-            if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
-                continue;
-        
-            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, 1))
-            {
-                currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
-                _unitsInRange.Add(currentUnit);
-            }
-        }
-     }
-
-    public override void Ranged()
+    public override void UnitAbility(int attackFactor, int attackRange)
     {
         foreach (var currentUnit in _cellGrid.Units)
         {
             if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
                 continue;
         
-            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, 4))
+            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, attackRange))
             {
                 currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
                 _unitsInRange.Add(currentUnit);
+                _unit.AttackFactor = attackFactor;
             }
         }
     }
