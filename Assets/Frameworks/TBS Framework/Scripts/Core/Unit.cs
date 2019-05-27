@@ -138,7 +138,6 @@ public abstract class Unit : MonoBehaviour
  
     void timerEnded()
     {
-        Debug.Log("Target time is reached");
         targetTime = ActionSpeed;
         isReady = true;
         OnTurnStart();

@@ -1,4 +1,6 @@
-﻿public class UnitStateMarkedAsFinished : UnitState
+﻿using UnityEngine;
+
+public class UnitStateMarkedAsFinished : UnitState
 {
     public UnitStateMarkedAsFinished(Unit unit) : base(unit)
     {      
@@ -15,6 +17,10 @@
         {
             state.Apply();
             _unit.UnitState = state;
+        }
+
+        if(_unit.ActionMenu) {
+            _unit.ActionMenu.SetActive(false); 
         }
     }
 }
