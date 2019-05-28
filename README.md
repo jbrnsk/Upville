@@ -4,4 +4,4 @@ Welcome to Upville! This is a tactical turn-based game developed in Unity. As ta
 
 https://open.spotify.com/show/2mSxCHupFRZAXIYTgey6G3?si=Yfkg5OulT4yp6Qe2HY6tnA
 
-One day I will be less lazy and have real documentation. To gain some idea of what is happening here, visit our site at jvgamedev.com 
+One day I will be less lazy and have real documentation. To gain some idea of what is happening here, visit our site at http://jvgamedev.com/
