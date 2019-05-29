@@ -179,9 +179,9 @@ public class CellGrid : MonoBehaviour
         if(GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
 
-        Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
-        Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
-        // Players.ForEach(u => { u.Play(this); });
+        // Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
+        // Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
+        Players.ForEach(u => { u.Play(this); });
     }
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.

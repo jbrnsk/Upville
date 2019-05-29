@@ -22,6 +22,8 @@ public class UnitStateMarkedAsFinished : UnitState
         if(_unit.ActionMenu) {
             _unit.ActionMenu.SetActive(false); 
         }
+
+        _unit.isReady = false;
     }
 }
 

@@ -33,89 +33,93 @@ public class NaiveAiPlayer : Player
         {
             if(!unit.isReady) 
             {
-                continue;
+                yield return new WaitForSeconds(2.5f);;
             }
 
-            var enemyUnits = _cellGrid.Units.Except(myUnits).ToList();
-            var unitsInRange = new List<Unit>();
-            foreach (var enemyUnit in enemyUnits)
-            {
-                if (unit.IsUnitAttackable(enemyUnit,unit.Cell))
-                {
-                    unitsInRange.Add(enemyUnit);
-                }
-            }//Looking for enemies that are in attack range.
-            if (unitsInRange.Count != 0)
-            {
-                var index = _rnd.Next(0, unitsInRange.Count);
-                unit.DealDamage(unitsInRange[index]);
-                yield return new WaitForSeconds(0.5f);
-                continue;
-            }//If there is an enemy in range, attack it.
+            yield return MakeAiUnitDecision(myUnits, unit);
+        }    
+        _cellGrid.EndTurn();   
+    }
 
-            List<Cell> potentialDestinations = new List<Cell>();
-            
-            foreach (var enemyUnit in enemyUnits)
+    private IEnumerator MakeAiUnitDecision(List<Unit> myUnits, Unit unit) {
+        var enemyUnits = _cellGrid.Units.Except(myUnits).ToList();
+        var unitsInRange = new List<Unit>();
+        foreach (var enemyUnit in enemyUnits)
+        {
+            if (unit.IsUnitAttackable(enemyUnit,unit.Cell))
             {
-                potentialDestinations.AddRange(_cellGrid.Cells.FindAll(c=> unit.IsCellMovableTo(c) && unit.IsUnitAttackable(enemyUnit, c))); 
-            }//Making a list of cells that the unit can attack from.
-      
-            var notInRange = potentialDestinations.FindAll(c => c.GetDistance(unit.Cell) > unit.MovementPoints);
-            potentialDestinations = potentialDestinations.Except(notInRange).ToList();
+                unitsInRange.Add(enemyUnit);
+            }
+        }//Looking for enemies that are in attack range.
+        if (unitsInRange.Count != 0)
+        {
+            var index = _rnd.Next(0, unitsInRange.Count);
+            unit.DealDamage(unitsInRange[index]);
+            yield return new WaitForSeconds(0.5f);
+            yield return 0; // Should be continue?
+        }//If there is an enemy in range, attack it.
 
-            if (potentialDestinations.Count == 0 && notInRange.Count !=0)
+        List<Cell> potentialDestinations = new List<Cell>();
+        
+        foreach (var enemyUnit in enemyUnits)
+        {
+            potentialDestinations.AddRange(_cellGrid.Cells.FindAll(c=> unit.IsCellMovableTo(c) && unit.IsUnitAttackable(enemyUnit, c))); 
+        }//Making a list of cells that the unit can attack from.
+    
+        var notInRange = potentialDestinations.FindAll(c => c.GetDistance(unit.Cell) > unit.MovementPoints);
+        potentialDestinations = potentialDestinations.Except(notInRange).ToList();
+
+        if (potentialDestinations.Count == 0 && notInRange.Count !=0)
+        {
+            potentialDestinations.Add(notInRange.ElementAt(_rnd.Next(0,notInRange.Count-1)));
+        }     
+
+        potentialDestinations = potentialDestinations.OrderBy(h => _rnd.Next()).ToList();
+        List<Cell> shortestPath = null;
+        foreach (var potentialDestination in potentialDestinations)
+        {
+            var path = unit.FindPath(_cellGrid.Cells, potentialDestination);
+            if ((shortestPath == null && path.Sum(h => h.MovementCost) > 0) || shortestPath != null && (path.Sum(h => h.MovementCost) < shortestPath.Sum(h => h.MovementCost) && path.Sum(h => h.MovementCost) > 0))
+                shortestPath = path;
+
+            var pathCost = path.Sum(h => h.MovementCost);
+            if (pathCost > 0 && pathCost <= unit.MovementPoints)
             {
-                potentialDestinations.Add(notInRange.ElementAt(_rnd.Next(0,notInRange.Count-1)));
-            }     
+                unit.Move(potentialDestination, path, _cellGrid);
+                while (unit.isMoving)
+                    yield return 0;
+                shortestPath = null;
+                break;
+            }
+            yield return 0;
+        }//If there is a path to any cell that the unit can attack from, move there.
 
-            potentialDestinations = potentialDestinations.OrderBy(h => _rnd.Next()).ToList();
-            List<Cell> shortestPath = null;
-            foreach (var potentialDestination in potentialDestinations)
+        if (shortestPath != null)
+        {      
+            foreach (var potentialDestination in shortestPath.Intersect(unit.GetAvailableDestinations(_cellGrid.Cells)).OrderByDescending(h => h.GetDistance(unit.Cell)))
             {
                 var path = unit.FindPath(_cellGrid.Cells, potentialDestination);
-                if ((shortestPath == null && path.Sum(h => h.MovementCost) > 0) || shortestPath != null && (path.Sum(h => h.MovementCost) < shortestPath.Sum(h => h.MovementCost) && path.Sum(h => h.MovementCost) > 0))
-                    shortestPath = path;
-
                 var pathCost = path.Sum(h => h.MovementCost);
                 if (pathCost > 0 && pathCost <= unit.MovementPoints)
                 {
                     unit.Move(potentialDestination, path, _cellGrid);
                     while (unit.isMoving)
                         yield return 0;
-                    shortestPath = null;
                     break;
                 }
                 yield return 0;
-            }//If there is a path to any cell that the unit can attack from, move there.
-
-            if (shortestPath != null)
-            {      
-                foreach (var potentialDestination in shortestPath.Intersect(unit.GetAvailableDestinations(_cellGrid.Cells)).OrderByDescending(h => h.GetDistance(unit.Cell)))
-                {
-                    var path = unit.FindPath(_cellGrid.Cells, potentialDestination);
-                    var pathCost = path.Sum(h => h.MovementCost);
-                    if (pathCost > 0 && pathCost <= unit.MovementPoints)
-                    {
-                        unit.Move(potentialDestination, path, _cellGrid);
-                        while (unit.isMoving)
-                            yield return 0;
-                        break;
-                    }
-                    yield return 0;
-                }
-            }//If the path cost is greater than unit movement points, move as far as possible.
-           
-            foreach (var enemyUnit in enemyUnits)
-            {
-                var enemyCell = enemyUnit.Cell;
-                if (unit.IsUnitAttackable(enemyUnit,unit.Cell))
-                { 
-                    unit.DealDamage(enemyUnit);
-                    yield return new WaitForSeconds(0.5f);
-                    break;
-                }
-            }//Look for enemies in range and attack.
-        }    
-        _cellGrid.EndTurn();   
+            }
+        }//If the path cost is greater than unit movement points, move as far as possible.
+        
+        foreach (var enemyUnit in enemyUnits)
+        {
+            var enemyCell = enemyUnit.Cell;
+            if (unit.IsUnitAttackable(enemyUnit,unit.Cell))
+            { 
+                unit.DealDamage(enemyUnit);
+                yield return new WaitForSeconds(0.5f);
+                break;
+            }
+        }//Look for enemies in range and attack.
     }
 }

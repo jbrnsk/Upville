@@ -138,8 +138,10 @@ public abstract class Unit : MonoBehaviour
  
     void timerEnded()
     {
+        Debug.Log("Unit has become available");
         targetTime = ActionSpeed;
         isReady = true;
+        SetState(new UnitStateNormal(this));
         OnTurnStart();
     }
 
@@ -164,6 +166,10 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnTurnStart()
     {
+        if(!isReady) {
+            return;
+        }
+
         MovementPoints = TotalMovementPoints;
         ActionPoints = TotalActionPoints;
 
@@ -196,6 +202,13 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
+        Debug.Log("On unit selected ");
+        Debug.Log(isReady);
+        if(!isReady) {
+            return;
+        }
+
+        Debug.Log("Missed return condition");
         ActionMenu.SetActive(true);
 
         SetState(new UnitStateMarkedAsSelected(this));
