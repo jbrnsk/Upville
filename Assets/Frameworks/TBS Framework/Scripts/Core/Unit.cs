@@ -169,7 +169,6 @@ public abstract class Unit : MonoBehaviour
         if(!isReady) {
             return;
         }
-
         MovementPoints = TotalMovementPoints;
         ActionPoints = TotalActionPoints;
 
