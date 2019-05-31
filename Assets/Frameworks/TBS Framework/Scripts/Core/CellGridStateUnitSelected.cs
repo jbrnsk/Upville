@@ -24,7 +24,7 @@ class CellGridStateUnitSelected : CellGridState
     public override void OnCellClicked(Cell cell)
     {
         _cellGrid.IsPaused = false;
-        
+
         if (_unit.isMoving)
             return;
         if(cell.IsTaken || !_pathsInRange.Contains(cell))

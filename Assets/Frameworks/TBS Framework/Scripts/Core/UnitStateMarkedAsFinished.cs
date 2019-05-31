@@ -22,9 +22,6 @@ public class UnitStateMarkedAsFinished : UnitState
         if(_unit.ActionMenu) {
             _unit.ActionMenu.SetActive(false); 
         }
-
-        _unit.IsReady = false;
-        _unit.Timer = _unit.ActionSpeed;
     }
 }
 

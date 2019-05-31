@@ -100,6 +100,8 @@ public class MyUnit : Unit
         SetColor(PlayerColor - Color.gray);
         SetHighlighterColor(new Color(0.8f, 1, 
         0.8f));
+        IsReady = false;
+        Timer = ActionSpeed;
     }
     public override void UnMark()
     {

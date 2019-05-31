@@ -141,12 +141,17 @@ public class CellGrid : MonoBehaviour
         }
 
         foreach(Unit unit in Units) {
+            // Un-commenting disabled AI units
+            // if(unit.PlayerNumber != CurrentPlayer.PlayerNumber) {
+            //     return;
+            // }
+
             if(!unit.IsReady) {
                 unit.Timer -= Time.deltaTime;
                 unit.UpdateTimerBar();
             }
 
-            if(unit.Timer <= 0.0f  && !unit.IsReady) {
+            if(unit.Timer <= 0.0f && !unit.IsReady) {
                 var myUnits = Units.FindAll(u => u.PlayerNumber.Equals(unit.PlayerNumber)).ToList();
 
                 Debug.Log("Unit is ready!");
@@ -204,10 +209,7 @@ public class CellGrid : MonoBehaviour
         if(GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
 
-        // Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
-        // Players.ForEach(p => { p.Play(this); });
-        // CellGridState = new CellGridStateWaitingForInput(this);
     }
 
     /// <summary>
