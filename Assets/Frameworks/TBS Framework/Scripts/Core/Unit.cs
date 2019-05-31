@@ -208,8 +208,6 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
-        Debug.Log("On unit selected ");
-        Debug.Log(IsReady);
         if(!IsReady) {
             return;
         }

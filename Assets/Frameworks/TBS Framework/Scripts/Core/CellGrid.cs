@@ -32,6 +32,11 @@ public class CellGrid : MonoBehaviour
     public event EventHandler TurnEnded;
 
     /// <summary>
+    /// Whether or not game is paused.
+    /// </summary>
+    public bool IsPaused;
+
+    /// <summary>
     /// UnitAdded event is invoked each time AddUnit method is called.
     /// </summary>
     public event EventHandler<UnitCreatedEventArgs> UnitAdded;
@@ -131,6 +136,10 @@ public class CellGrid : MonoBehaviour
     }
 
     void Update(){
+        if(IsPaused) {
+            return;
+        }
+
         foreach(Unit unit in Units) {
             if(!unit.IsReady) {
                 unit.Timer -= Time.deltaTime;
@@ -196,8 +205,9 @@ public class CellGrid : MonoBehaviour
             GameStarted.Invoke(this, new EventArgs());
 
         // Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
-        // Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
-        Players.ForEach(u => { u.Play(this); });
+        Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
+        // Players.ForEach(p => { p.Play(this); });
+        // CellGridState = new CellGridStateWaitingForInput(this);
     }
 
     /// <summary>

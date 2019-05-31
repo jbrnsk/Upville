@@ -7,11 +7,12 @@ public class Spearman : MyUnit
 {
     public override void Activate(CellGrid cellGrid, List<Unit> myUnits) {
         IsReady = true;
+        OnTurnStart();
         StartCoroutine(Play(cellGrid, myUnits)); 
-
-        Debug.Log("What be happening");
-        IsReady = false;
         Timer = ActionSpeed;
+        OnTurnEnd();
+        IsReady = false;
+        Debug.Log("FIRE AWAY?");
     }
 
     private IEnumerator Play(CellGrid cellGrid, List<Unit> myUnits){   
