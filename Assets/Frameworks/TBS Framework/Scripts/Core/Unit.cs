@@ -70,8 +70,8 @@ public abstract class Unit : MonoBehaviour
     public Cell Cell { get; set; }
 
     public float ActionSpeed;
-    private float targetTime;
-    public bool isReady = false;
+    public bool IsReady = false;
+    public float Timer = 0.0f;
     public int HitPoints;
     public int AttackRange;
     public int AttackFactor;
@@ -119,32 +119,8 @@ public abstract class Unit : MonoBehaviour
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
-        targetTime = ActionSpeed;
     }
  
-    void Update(){
-        if (isReady) 
-        {
-            return;
-        }
-
-        targetTime -= Time.deltaTime;
- 
-        if (targetTime <= 0.0f)
-        {
-            timerEnded();
-        }
-    }
- 
-    void timerEnded()
-    {
-        Debug.Log("Unit has become available");
-        targetTime = ActionSpeed;
-        isReady = true;
-        SetState(new UnitStateNormal(this));
-        OnTurnStart();
-    }
-
     protected virtual void OnMouseDown()
     {
         if (UnitClicked != null)
@@ -166,7 +142,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnTurnStart()
     {
-        if(!isReady) {
+        if(!IsReady) {
             return;
         }
         MovementPoints = TotalMovementPoints;
@@ -186,6 +162,14 @@ public abstract class Unit : MonoBehaviour
 
         SetState(new UnitStateNormal(this));
     }
+
+    /// <summary>
+    /// Method is called when unit becomes available to activate.
+    /// </summary>
+    public virtual void Activate(CellGrid _cellGrid, List<Unit> myUnits)
+    {
+    }
+
     /// <summary>
     /// Method is called when units HP drops below 1.
     /// </summary>
@@ -202,12 +186,11 @@ public abstract class Unit : MonoBehaviour
     public virtual void OnUnitSelected()
     {
         Debug.Log("On unit selected ");
-        Debug.Log(isReady);
-        if(!isReady) {
+        Debug.Log(IsReady);
+        if(!IsReady) {
             return;
         }
 
-        Debug.Log("Missed return condition");
         ActionMenu.SetActive(true);
 
         SetState(new UnitStateMarkedAsSelected(this));
@@ -265,6 +248,7 @@ public abstract class Unit : MonoBehaviour
             MovementPoints = 0;
         }  
     }
+
     /// <summary>
     /// Attacking unit calls Defend method on defending unit. 
     /// </summary>
@@ -355,6 +339,7 @@ public abstract class Unit : MonoBehaviour
         }
 
         isMoving = false;
+        MarkAsFinished();
     }
 
     ///<summary>

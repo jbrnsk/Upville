@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Collections;
 
 /// <summary>
 /// CellGrid class keeps track of the game, stores cells, units and players objects. It starts the game and makes turn transitions. 
@@ -51,7 +52,6 @@ public class CellGrid : MonoBehaviour
                 _cellGridState.OnStateExit();
             _cellGridState = value;
             _cellGridState.OnStateEnter();
-            // _cellGridState._activeUnitMenu = _activeUnitMenu;
         }
     }
 
@@ -130,6 +130,21 @@ public class CellGrid : MonoBehaviour
             Debug.LogError("No IUnitGenerator script attached to cell grid");
     }
 
+    void Update(){
+        foreach(Unit unit in Units) {
+            if(!unit.IsReady) {
+                unit.Timer += Time.deltaTime;
+            }
+
+            if(unit.Timer >= unit.ActionSpeed  && !unit.IsReady) {
+                var myUnits = Units.FindAll(u => u.PlayerNumber.Equals(unit.PlayerNumber)).ToList();
+
+                Debug.Log("Unit is ready!");
+                unit.Activate(this, myUnits);
+            }
+        }
+    }
+
     private void OnCellDehighlighted(object sender, EventArgs e)
     {
         CellGridState.OnCellDeselected(sender as Cell);
@@ -183,6 +198,7 @@ public class CellGrid : MonoBehaviour
         // Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
         Players.ForEach(u => { u.Play(this); });
     }
+
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.
     /// </summary>

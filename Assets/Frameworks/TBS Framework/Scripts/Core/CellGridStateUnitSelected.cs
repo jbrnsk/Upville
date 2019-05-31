@@ -78,7 +78,7 @@ class CellGridStateUnitSelected : CellGridState
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        if(!_unit.isReady) {
+        if(!_unit.IsReady) {
             return;
         }
         _unit.OnUnitSelected();

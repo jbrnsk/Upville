@@ -27,6 +27,13 @@ public class MyUnit : Unit
         UpdateHpBar();
     }
 
+    public override void Activate(CellGrid _cellGrid, List<Unit> myUnits)
+    {
+        IsReady = true;
+        SetState(new UnitStateNormal(this));
+        OnTurnStart();
+    }
+
     public override void Move(Cell destinationCell, List<Cell> path, CellGrid cellGrid)
     {
         base.Move(destinationCell, path, cellGrid);
@@ -91,7 +98,8 @@ public class MyUnit : Unit
     public override void MarkAsFinished()
     {
         SetColor(PlayerColor - Color.gray);
-        SetHighlighterColor(new Color(0.8f, 1, 0.8f));
+        SetHighlighterColor(new Color(0.8f, 1, 
+        0.8f));
     }
     public override void UnMark()
     {

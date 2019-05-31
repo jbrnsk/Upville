@@ -23,7 +23,8 @@ public class UnitStateMarkedAsFinished : UnitState
             _unit.ActionMenu.SetActive(false); 
         }
 
-        _unit.isReady = false;
+        _unit.IsReady = false;
+        _unit.Timer = 0.0f;
     }
 }
 
