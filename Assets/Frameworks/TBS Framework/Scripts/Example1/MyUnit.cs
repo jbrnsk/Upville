@@ -109,10 +109,12 @@ public class MyUnit : Unit
 
     private void UpdateHpBar()
     {
-        if (GetComponentInChildren<Image>() != null)
+         var healthGraphic = HealthBar?.GetComponent<Image>();
+
+        if (healthGraphic != null)
         {
-            GetComponentInChildren<Image>().transform.localScale = new Vector3((float)((float)HitPoints / (float)TotalHitPoints), 1, 1);
-            GetComponentInChildren<Image>().color = Color.Lerp(Color.red, Color.green,
+            healthGraphic.transform.localScale = new Vector3((float)((float)HitPoints / (float)TotalHitPoints), 1, 1);
+            healthGraphic.color = Color.Lerp(Color.red, Color.green,
                 (float)((float)HitPoints / (float)TotalHitPoints));
         }
     }

@@ -24,7 +24,7 @@ public class UnitStateMarkedAsFinished : UnitState
         }
 
         _unit.IsReady = false;
-        _unit.Timer = 0.0f;
+        _unit.Timer = _unit.ActionSpeed;
     }
 }
 

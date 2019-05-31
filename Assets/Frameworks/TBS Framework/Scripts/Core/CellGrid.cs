@@ -133,10 +133,11 @@ public class CellGrid : MonoBehaviour
     void Update(){
         foreach(Unit unit in Units) {
             if(!unit.IsReady) {
-                unit.Timer += Time.deltaTime;
+                unit.Timer -= Time.deltaTime;
+                unit.UpdateTimerBar();
             }
 
-            if(unit.Timer >= unit.ActionSpeed  && !unit.IsReady) {
+            if(unit.Timer <= 0.0f  && !unit.IsReady) {
                 var myUnits = Units.FindAll(u => u.PlayerNumber.Equals(unit.PlayerNumber)).ToList();
 
                 Debug.Log("Unit is ready!");

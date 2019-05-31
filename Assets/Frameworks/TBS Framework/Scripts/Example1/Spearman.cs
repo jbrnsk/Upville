@@ -11,7 +11,7 @@ public class Spearman : MyUnit
 
         Debug.Log("What be happening");
         IsReady = false;
-        Timer = 0.0f;
+        Timer = ActionSpeed;
     }
 
     private IEnumerator Play(CellGrid cellGrid, List<Unit> myUnits){   

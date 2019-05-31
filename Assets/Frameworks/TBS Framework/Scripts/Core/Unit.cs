@@ -71,7 +71,7 @@ public abstract class Unit : MonoBehaviour
 
     public float ActionSpeed;
     public bool IsReady = false;
-    public float Timer = 0.0f;
+    public float Timer;
     public int HitPoints;
     public int AttackRange;
     public int AttackFactor;
@@ -92,6 +92,14 @@ public abstract class Unit : MonoBehaviour
     /// The object that contains the interactable actions that this unit can perform.
     /// </summary>
     public GameObject ActionMenu;
+    /// <summary>
+    /// The health bar game object.
+    /// </summary>
+    public GameObject HealthBar;
+    /// <summary>
+    /// The move timer game object.
+    /// </summary>
+    public GameObject MoveTimer;
 
     /// <summary>
     /// Indicates the player that the unit belongs to. 
@@ -119,6 +127,7 @@ public abstract class Unit : MonoBehaviour
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
+        Timer = ActionSpeed;
     }
  
     protected virtual void OnMouseDown()
@@ -178,6 +187,20 @@ public abstract class Unit : MonoBehaviour
         Cell.IsTaken = false;
         MarkAsDestroyed();
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Method is called when units HP drops below 1.
+    /// </summary>
+    public virtual void UpdateTimerBar() {
+        var timerGraphic = MoveTimer?.GetComponent<Image>();
+
+        if (timerGraphic != null)
+        {
+            timerGraphic.transform.localScale = new Vector3((float)((float)Timer / (float)ActionSpeed), 1, 1);
+            timerGraphic.color = Color.Lerp(Color.blue, Color.red,
+                (float)((float)Timer / (float)ActionSpeed));
+        }
     }
 
     /// <summary>
