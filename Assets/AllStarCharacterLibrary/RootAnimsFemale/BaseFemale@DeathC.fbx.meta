@@ -1,0 +1,179 @@
+fileFormatVersion: 2
+guid: 359966dfa7658d1498b7fdeec89406eb
+timeCreated: 1524059770
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Head
+    100004: Hips
+    100006: L Calf
+    100008: L Clavicle
+    100010: L Finger0
+    100012: L Finger01
+    100014: L Finger02
+    100016: L Finger1
+    100018: L Finger11
+    100020: L Finger12
+    100022: L Finger2
+    100024: L Finger21
+    100026: L Finger22
+    100028: L Finger3
+    100030: L Finger31
+    100032: L Finger32
+    100034: L Finger4
+    100036: L Finger41
+    100038: L Finger42
+    100040: L Foot
+    100042: L Forearm
+    100044: L Hand
+    100046: L Thigh
+    100048: L Toe0
+    100050: L UpperArm
+    100052: Neck
+    100054: Origin
+    100056: R Calf
+    100058: R Clavicle
+    100060: R Finger0
+    100062: R Finger01
+    100064: R Finger02
+    100066: R Finger1
+    100068: R Finger11
+    100070: R Finger12
+    100072: R Finger2
+    100074: R Finger21
+    100076: R Finger22
+    100078: R Finger3
+    100080: R Finger31
+    100082: R Finger32
+    100084: R Finger4
+    100086: R Finger41
+    100088: R Finger42
+    100090: R Foot
+    100092: R Forearm
+    100094: R Hand
+    100096: R Thigh
+    100098: R Toe0
+    100100: R UpperArm
+    100102: ROOT
+    100104: Spine
+    100106: Spine1
+    400000: //RootNode
+    400002: Head
+    400004: Hips
+    400006: L Calf
+    400008: L Clavicle
+    400010: L Finger0
+    400012: L Finger01
+    400014: L Finger02
+    400016: L Finger1
+    400018: L Finger11
+    400020: L Finger12
+    400022: L Finger2
+    400024: L Finger21
+    400026: L Finger22
+    400028: L Finger3
+    400030: L Finger31
+    400032: L Finger32
+    400034: L Finger4
+    400036: L Finger41
+    400038: L Finger42
+    400040: L Foot
+    400042: L Forearm
+    400044: L Hand
+    400046: L Thigh
+    400048: L Toe0
+    400050: L UpperArm
+    400052: Neck
+    400054: Origin
+    400056: R Calf
+    400058: R Clavicle
+    400060: R Finger0
+    400062: R Finger01
+    400064: R Finger02
+    400066: R Finger1
+    400068: R Finger11
+    400070: R Finger12
+    400072: R Finger2
+    400074: R Finger21
+    400076: R Finger22
+    400078: R Finger3
+    400080: R Finger31
+    400082: R Finger32
+    400084: R Finger4
+    400086: R Finger41
+    400088: R Finger42
+    400090: R Foot
+    400092: R Forearm
+    400094: R Hand
+    400096: R Thigh
+    400098: R Toe0
+    400100: R UpperArm
+    400102: ROOT
+    400104: Spine
+    400106: Spine1
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
