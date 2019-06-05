@@ -29,12 +29,15 @@ public class Hero : MyUnit
         }       
 
         ActionMenu.gameObject.SetActive(true);
+        CellGrid.IsPaused = true;
     }
     public override void OnUnitDeselected()
     {
         _specialAbilityButton.gameObject.SetActive(false);
 
         ActionMenu.gameObject.SetActive(false);
+        CellGrid.IsPaused = true;
+
     }
 
     private void EnableSpecialAbilityButton() 

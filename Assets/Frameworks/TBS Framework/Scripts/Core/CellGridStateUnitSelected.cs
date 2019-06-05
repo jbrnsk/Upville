@@ -23,8 +23,6 @@ class CellGridStateUnitSelected : CellGridState
 
     public override void OnCellClicked(Cell cell)
     {
-        _cellGrid.IsPaused = false;
-
         if (_unit.isMoving)
             return;
         if(cell.IsTaken || !_pathsInRange.Contains(cell))
@@ -39,8 +37,6 @@ class CellGridStateUnitSelected : CellGridState
     }
     public override void OnUnitClicked(Unit unit)
     {
-        _cellGrid.IsPaused = true;
-
         if (unit.Equals(_unit) || _unit.isMoving)
             return;
 

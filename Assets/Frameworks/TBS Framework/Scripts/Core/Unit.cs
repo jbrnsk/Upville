@@ -65,6 +65,11 @@ public abstract class Unit : MonoBehaviour
     protected int TotalActionPoints;
 
     /// <summary>
+    /// The health bar game object.
+    /// </summary>
+    public CellGrid CellGrid;
+
+    /// <summary>
     /// Cell that the unit is currently occupying.
     /// </summary>
     public Cell Cell { get; set; }
@@ -123,6 +128,12 @@ public abstract class Unit : MonoBehaviour
         Buffs = new List<Buff>();
 
         UnitState = new UnitStateNormal(this);
+
+        CellGrid = (CellGrid)GameObject.Find("CellGrid").GetComponent("CellGrid");
+
+        Debug.Log("THE CELL GRID IST HIER");
+        Debug.Log(CellGrid);
+
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
@@ -213,6 +224,7 @@ public abstract class Unit : MonoBehaviour
         }
 
         ActionMenu.SetActive(true);
+        CellGrid.IsPaused = true;
 
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
@@ -227,6 +239,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void OnUnitDeselected()
     {
         ActionMenu.SetActive(false);
+        CellGrid.IsPaused = false;
 
         SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)
