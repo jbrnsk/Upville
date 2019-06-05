@@ -60,7 +60,7 @@ public class RandomObstacleGenerator : MonoBehaviour
 
             var obstacle = Instantiate(ObstaclePrefab);
             obstacle.transform.parent = ObstaclesParent.transform;
-            obstacle.transform.rotation = cell.transform.rotation;
+            // obstacle.transform.rotation = cell.transform.rotation;
             obstacle.transform.localPosition = cell.transform.localPosition + new Vector3(0, cell.GetCellDimensions().y, 0);
             ret.Add(obstacle);   
         }
