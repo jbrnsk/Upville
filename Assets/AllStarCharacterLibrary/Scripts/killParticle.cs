@@ -4,14 +4,14 @@ using System.Collections;
 
 public class killParticle : MonoBehaviour 
 {
-	ParticleEmitter pe;
+	ParticleSystemRenderer pe;
 	public float lifespan;
 	float startTime;
 
 	// Use this for initialization
 	void Start () 
 	{
-		pe = GetComponent<ParticleEmitter>();
+		pe = GetComponent<ParticleSystemRenderer>();
 		startTime = Time.fixedTime;
 	}
 	
