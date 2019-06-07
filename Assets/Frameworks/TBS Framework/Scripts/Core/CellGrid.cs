@@ -141,11 +141,6 @@ public class CellGrid : MonoBehaviour
         }
 
         foreach(Unit unit in Units) {
-            // Un-commenting disabled AI units
-            // if(unit.PlayerNumber != CurrentPlayer.PlayerNumber) {
-            //     return;
-            // }
-
             if(!unit.IsReady) {
                 unit.Timer -= Time.deltaTime;
                 unit.UpdateTimerBar();
@@ -154,7 +149,6 @@ public class CellGrid : MonoBehaviour
             if(unit.Timer <= 0.0f && !unit.IsReady) {
                 var myUnits = Units.FindAll(u => u.PlayerNumber.Equals(unit.PlayerNumber)).ToList();
 
-                Debug.Log("Unit is ready!");
                 unit.Activate(this, myUnits);
             }
         }

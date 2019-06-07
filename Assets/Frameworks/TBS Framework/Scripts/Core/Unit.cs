@@ -65,7 +65,7 @@ public abstract class Unit : MonoBehaviour
     protected int TotalActionPoints;
 
     /// <summary>
-    /// The health bar game object.
+    /// The cell grid game object.
     /// </summary>
     public CellGrid CellGrid;
 
@@ -130,10 +130,6 @@ public abstract class Unit : MonoBehaviour
         UnitState = new UnitStateNormal(this);
 
         CellGrid = (CellGrid)GameObject.Find("CellGrid").GetComponent("CellGrid");
-
-        Debug.Log("THE CELL GRID IST HIER");
-        Debug.Log(CellGrid);
-
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
