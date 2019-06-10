@@ -61,7 +61,7 @@ public class CustomUnitGenerator : MonoBehaviour, IUnitGenerator
 
             if (!closestCell.GetComponent<Cell>().IsTaken)
             {
-                Vector3 offset = new Vector3(0, closestCell.GetComponent<Cell>().GetCellDimensions().z, 0);
+                Vector3 offset = new Vector3(0, closestCell.GetComponent<Cell>().GetCellDimensions().y, 0);
                 unit.localPosition = closestCell.transform.localPosition + offset;
             }//Unit gets snapped to the nearest cell
         }

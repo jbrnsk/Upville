@@ -12,7 +12,6 @@ public class Spearman : MyUnit
         Timer = ActionSpeed;
         OnTurnEnd();
         IsReady = false;
-        Debug.Log("FIRE AWAY?");
     }
 
     private IEnumerator Play(CellGrid cellGrid, List<Unit> myUnits){   
