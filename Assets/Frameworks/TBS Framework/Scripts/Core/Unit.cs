@@ -341,6 +341,7 @@ public abstract class Unit : MonoBehaviour
         path.Reverse();
         foreach (var cell in path)
         {
+            AbilityPoints ++;
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
             while (transform.localPosition != destination_pos)
             {
@@ -374,7 +375,7 @@ public abstract class Unit : MonoBehaviour
                 }
             }
 
-            button.interactable = hasUnitInRange;
+            button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= AbilityPoints ;
         }
 
         isMoving = false;

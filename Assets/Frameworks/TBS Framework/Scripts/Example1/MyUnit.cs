@@ -9,7 +9,7 @@ public class MyUnit : Unit
     public string UnitName;
     private Transform Highlighter;
 
-    private float offset = -0.45f;//2.45f;
+    private float offset = -0.45f;
 
     public override void Initialize()
     {
