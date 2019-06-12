@@ -226,6 +226,8 @@ public abstract class Unit : MonoBehaviour
         ActionMenu.SetActive(true);
         CellGrid.IsPaused = true;
 
+        DetermineAvailableActions(CellGrid);
+
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
         {
@@ -356,6 +358,17 @@ public abstract class Unit : MonoBehaviour
         }
 
         // Set ability buttons as interactable based on whether or not enemies in range. 
+        DetermineAvailableActions(cellGrid);
+
+        isMoving = false;
+        MarkAsFinished();
+    }
+
+
+    ///<summary>
+    /// Method sets available actions on action menu based on enemies in range and current ability points.
+    /// </summary>
+    public void DetermineAvailableActions(CellGrid cellGrid) {
         foreach(Transform child in ActionMenu.transform)
         {
             UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
@@ -377,9 +390,6 @@ public abstract class Unit : MonoBehaviour
 
             button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= AbilityPoints ;
         }
-
-        isMoving = false;
-        MarkAsFinished();
     }
 
     ///<summary>
