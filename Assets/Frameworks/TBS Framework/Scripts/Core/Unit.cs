@@ -78,8 +78,11 @@ public abstract class Unit : MonoBehaviour
     public bool IsReady = false;
     public float Timer;
     public int HitPoints;
+    public int AbilityPoints;
+    public int AbilityPointsMaximum;
     public int AttackRange;
     public int AttackFactor;
+    public int AttackCost;
     public int DefenceFactor;
     /// <summary>
     /// Determines how far on the grid the unit can move.
@@ -134,6 +137,7 @@ public abstract class Unit : MonoBehaviour
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
+        AbilityPoints = AbilityPointsMaximum;
         Timer = ActionSpeed;
     }
  
@@ -246,8 +250,12 @@ public abstract class Unit : MonoBehaviour
     /// Method indicates if it is possible to attack unit given as parameter, 
     /// from cell given as second parameter.
     /// </summary>
-    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, int range = 1)
+    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, int range = 1, int cost = 0)
     {
+        if(cost > AbilityPoints) {
+            return false;
+        }
+
         if (sourceCell.GetDistance(other.Cell) <= range)
             return true;
 
@@ -271,6 +279,7 @@ public abstract class Unit : MonoBehaviour
         MarkAsAttacking(other);
         ActionPoints--;
         other.Defend(this, AttackFactor);
+        AbilityPoints -= AttackFactor;
 
         if (ActionPoints == 0)
         {

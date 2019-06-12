@@ -246,7 +246,8 @@ public class CellGrid : MonoBehaviour
     public void UnitAbility(UnitAbility selectedUnitAbility)
     {
         int attackRange = selectedUnitAbility.AttackRange;
-        int attackFactor = selectedUnitAbility.AttackFactor;
-        _cellGridState.UnitAbility(attackFactor, attackRange);
+        int attackFactor = selectedUnitAbility.AttackFactor;    
+        int cost = selectedUnitAbility.AbilityPointCost;  
+        _cellGridState.UnitAbility(attackFactor, attackRange, cost);
     }
 }

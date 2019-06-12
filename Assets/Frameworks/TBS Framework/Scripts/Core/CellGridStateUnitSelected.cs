@@ -117,18 +117,19 @@ class CellGridStateUnitSelected : CellGridState
         }   
     }
 
-    public override void UnitAbility(int attackFactor, int attackRange)
+    public override void UnitAbility(int attackFactor, int attackRange, int cost)
     {
         foreach (var currentUnit in _cellGrid.Units)
         {
             if (currentUnit.PlayerNumber.Equals(_unit.PlayerNumber))
                 continue;
         
-            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, attackRange))
+            if (_unit.IsUnitAttackable(currentUnit, _unit.Cell, attackRange, cost))
             {
                 currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
                 _unitsInRange.Add(currentUnit);
                 _unit.AttackFactor = attackFactor;
+                _unit.AttackCost = cost;
             }
         }
     }

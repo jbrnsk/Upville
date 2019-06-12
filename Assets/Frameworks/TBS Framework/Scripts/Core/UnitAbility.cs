@@ -9,6 +9,7 @@ public  class UnitAbility : MonoBehaviour
 
     public int AttackFactor;
     public int AttackRange;
+    public int AbilityPointCost;
 
     public UnitAbility()
     {
