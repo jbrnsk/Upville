@@ -10,6 +10,7 @@ using System.Collections;
 /// </summary>
 public abstract class Unit : MonoBehaviour
 {
+    Animator animator;
     Dictionary<Cell, List<Cell>> cachedPaths = null;
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. 
@@ -134,11 +135,23 @@ public abstract class Unit : MonoBehaviour
 
         CellGrid = (CellGrid)GameObject.Find("CellGrid").GetComponent("CellGrid");
 
+        animator = GetComponentInChildren<Animator>();//need this...
+
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
         AbilityPoints = AbilityPointsMaximum;
         Timer = ActionSpeed;
+    }
+
+    private void OnTriggerEnter(Collider target)
+    {
+        Debug.Log("Entered");
+        if(target.tag == "Token")
+        {
+            AbilityPoints += 3;
+            Destroy(target.gameObject);
+        }
     }
  
     protected virtual void OnMouseDown()
@@ -341,6 +354,8 @@ public abstract class Unit : MonoBehaviour
     {
         isMoving = true;
         path.Reverse();
+        // animator.SetBool("Idling", false);
+
         foreach (var cell in path)
         {
             AbilityPoints ++;
@@ -360,6 +375,7 @@ public abstract class Unit : MonoBehaviour
         // Set ability buttons as interactable based on whether or not enemies in range. 
         DetermineAvailableActions(cellGrid);
 
+        // animator.SetBool("Idling", true);
         isMoving = false;
         MarkAsFinished();
     }

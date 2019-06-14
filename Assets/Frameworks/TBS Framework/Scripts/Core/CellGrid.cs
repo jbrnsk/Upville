@@ -36,6 +36,8 @@ public class CellGrid : MonoBehaviour
     /// </summary>
     public bool IsPaused;
 
+
+
     /// <summary>
     /// UnitAdded event is invoked each time AddUnit method is called.
     /// </summary>
@@ -52,13 +54,15 @@ public class CellGrid : MonoBehaviour
             return _cellGridState;
         }
         set
-        {
+        { 
             if(_cellGridState != null)
                 _cellGridState.OnStateExit();
             _cellGridState = value;
             _cellGridState.OnStateEnter();
         }
     }
+
+    private CustomTokenGenerator TokenGenerator; //The grid delegates some of its behaviours to cellGridState object.
 
     public int NumberOfPlayers { get; private set; }
 
@@ -93,6 +97,7 @@ public class CellGrid : MonoBehaviour
     private void Initialize()
     {
         Players = new List<Player>();
+
         for (int i = 0; i < PlayersParent.childCount; i++)
         {
             var player = PlayersParent.GetChild(i).GetComponent<Player>();
@@ -133,11 +138,27 @@ public class CellGrid : MonoBehaviour
         }
         else
             Debug.LogError("No IUnitGenerator script attached to cell grid");
+
+        TokenGenerator = (CustomTokenGenerator)this.gameObject.GetComponent("CustomTokenGenerator");
+        if (unitGenerator != null)
+        {
+            StartCoroutine(TokenGenerator.SpawnTokens());
+        }
+        else
+            Debug.LogError("No CustomTokenGenerator attached to cell grid");
+        
     }
 
     void Update(){
         if(IsPaused) {
             return;
+        }
+
+        TokenGenerator.Timer -= Time.deltaTime;
+
+        if( TokenGenerator.Timer <= 0){
+            StartCoroutine(TokenGenerator.SpawnTokens());
+            TokenGenerator.Timer = CustomTokenGenerator.InitialTimer;
         }
 
         foreach(Unit unit in Units) {

@@ -11,24 +11,18 @@ public class CustomTokenGenerator : MonoBehaviour
     public Transform TokensParent;
     public GameObject TokenPrefab;
     public CellGrid CellGrid;
+    private RandomObstacleGenerator _obstacleGenerator;
 
-    const float initialTimer = 10;
-    private float _timer = initialTimer;
+    public static float InitialTimer = 10;
+    public float Timer = InitialTimer;
 
-    public void Start()
+    private void Start()
     {
-        StartCoroutine(SpawnTokens());
-    }
+         _obstacleGenerator = (RandomObstacleGenerator)this.gameObject.GetComponent("RandomObstacleGenerator");
 
-    void Update()
-    {
-        _timer -= Time.deltaTime;
-
-        if(_timer <= 0){
-            StartCoroutine(SpawnTokens());
-            _timer = initialTimer;
-        }
-        
+         if(!_obstacleGenerator){
+            Debug.LogError("No RandomObstacleGenerator found by CustomTokenGenerator");
+         }
     }
 
     /// <summary>
@@ -37,7 +31,7 @@ public class CustomTokenGenerator : MonoBehaviour
     /// </summary>
     public IEnumerator SpawnTokens()
     {
-       while (CellGrid.Cells == null)
+       while (CellGrid.Cells == null || !_obstacleGenerator.ObstaclesSpawned)
         {
             yield return 0;
         }
@@ -68,13 +62,13 @@ public class CustomTokenGenerator : MonoBehaviour
             }
         }
 
-        List<Cell> freeCells = cells.FindAll(h => h.GetComponent<Cell>().IsTaken == false);
+        List<Cell> freeCells = cells.FindAll(h => h.GetComponent<Cell>().IsTaken == false && h.GetComponent<Cell>().IsToken == false);
         freeCells = freeCells.OrderBy(h => _rnd.Next()).ToList();
 
         for (int i = 0; i < Mathf.Clamp(Amount,Amount,freeCells.Count); i++)
         {
             var cell = freeCells.ElementAt(i);
-            cell.GetComponent<Cell>().IsTaken = true;
+            cell.GetComponent<Cell>().IsToken = true;
 
             var token = Instantiate(TokenPrefab);
             token.transform.parent = TokensParent.transform;

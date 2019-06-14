@@ -11,6 +11,7 @@ public class RandomObstacleGenerator : MonoBehaviour
     public int Amount;
     public Transform ObstaclesParent;
     public GameObject ObstaclePrefab;
+    public bool ObstaclesSpawned = false;
 
     public CellGrid CellGrid;
 
@@ -64,6 +65,8 @@ public class RandomObstacleGenerator : MonoBehaviour
             obstacle.transform.localPosition = cell.transform.localPosition + new Vector3(0, cell.GetCellDimensions().y, 0);
             ret.Add(obstacle);   
         }
+
+        ObstaclesSpawned = true;
     }
 
     private Vector3 getBounds(Transform transform)

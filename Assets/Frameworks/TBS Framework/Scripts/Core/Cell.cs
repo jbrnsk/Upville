@@ -20,6 +20,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// </summary>
     public bool IsTaken;
     /// <summary>
+    /// Indicates if token is occupying the cell.
+    /// </summary>
+    public bool IsToken;
+    /// <summary>
     /// Cost of moving through the cell.
     /// </summary>
     public int MovementCost;
