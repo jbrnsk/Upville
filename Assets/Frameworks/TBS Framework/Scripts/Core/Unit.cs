@@ -385,27 +385,27 @@ public abstract class Unit : MonoBehaviour
     /// Method sets available actions on action menu based on enemies in range and current ability points.
     /// </summary>
     public void DetermineAvailableActions(CellGrid cellGrid) {
-        foreach(Transform child in ActionMenu.transform)
-        {
-            UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
-            Button button = (Button)child.gameObject.GetComponent("Button");
-            int attackRange = unitAbility.AttackRange;
-            bool hasUnitInRange = false;
+        // foreach(Transform child in ActionMenu.transform)
+        // {
+        //     UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
+        //     Button button = (Button)child.gameObject.GetComponent("Button");
+        //     int attackRange = unitAbility.AttackRange;
+        //     bool hasUnitInRange = false;
 
-            foreach (var currentUnit in cellGrid.Units)
-            {
-                if (currentUnit.PlayerNumber.Equals(PlayerNumber))
-                    continue;
+        //     foreach (var currentUnit in cellGrid.Units)
+        //     {
+        //         if (currentUnit.PlayerNumber.Equals(PlayerNumber))
+        //             continue;
             
-                if (IsUnitAttackable(currentUnit, Cell, attackRange))
-                {
-                    hasUnitInRange = true;
-                    break;
-                }
-            }
+        //         if (IsUnitAttackable(currentUnit, Cell, attackRange))
+        //         {
+        //             hasUnitInRange = true;
+        //             break;
+        //         }
+        //     }
 
-            button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= AbilityPoints ;
-        }
+        //     button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= AbilityPoints ;
+        // }
     }
 
     ///<summary>
