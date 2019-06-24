@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class GuiController : MonoBehaviour
 {
     public CellGrid CellGrid;
-    public Button NextTurnButton;
 
     public Image UnitImage;
     public Text InfoText;
@@ -38,8 +37,6 @@ public class GuiController : MonoBehaviour
     }
     private void OnTurnEnded(object sender, EventArgs e)
     {
-        NextTurnButton.interactable = ((sender as CellGrid).CurrentPlayer is HumanPlayer);
-
         InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber +1);
     }
     private void OnCellDehighlighted(object sender, EventArgs e)

@@ -46,19 +46,6 @@ public class CustomTokenGenerator : MonoBehaviour
             {
                 var token = TokensParent.GetChild(i);
                 ret.Add(token.gameObject); 
-                // var bounds = getBounds(token);
-
-                // var cell = cells.OrderBy(h => Math.Abs((h.transform.position - token.transform.position).magnitude)).First();
-                // if (!cell.IsTaken)
-                // {
-                //     cell.IsTaken = true;
-                //     token.localPosition = cell.transform.localPosition + new Vector3(0, bounds.y, 0);
-                      
-                // }
-                // else
-                // {
-                //     Destroy(token.gameObject);
-                // }
             }
         }
 
@@ -74,7 +61,7 @@ public class CustomTokenGenerator : MonoBehaviour
             token.transform.parent = TokensParent.transform;
 
             // Move new tokens and keep old in same position
-            token.transform.localPosition = cell.transform.localPosition + new Vector3(0, cell.GetCellDimensions().y + 0.5f, 0);
+            token.transform.localPosition = cell.transform.localPosition + new Vector3(0, cell.GetCellDimensions().y + 0.75f, 0);
             ret.Add(token);   
         }
     }
