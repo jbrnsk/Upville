@@ -79,11 +79,17 @@ public abstract class Unit : MonoBehaviour
     public bool IsReady = false;
     public float Timer;
     public int HitPoints;
-    public int AbilityPoints;
-    public int AbilityPointsMaximum;
+    public int StrengthPoints;
+    public int StrengthPointsMaximum;
+    public int SpeedPoints;
+    public int SpeedPointsMaximum;
+    public int CunningPoints;
+    public int CunningPointsMaximum;
     public int AttackRange;
     public int AttackFactor;
-    public int AttackCost;
+    public int StrengthCost;
+    public int SpeedCost;
+    public int CunningCost;
     public int DefenceFactor;
     /// <summary>
     /// Determines how far on the grid the unit can move.
@@ -140,18 +146,30 @@ public abstract class Unit : MonoBehaviour
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
-        AbilityPoints = AbilityPointsMaximum;
+        StrengthPoints = StrengthPointsMaximum;
+        SpeedPoints = SpeedPointsMaximum;
+        CunningPoints = CunningPointsMaximum;
         Timer = ActionSpeed;
     }
 
     private void OnTriggerEnter(Collider target)
     {
-        Debug.Log("Entered");
-        if(target.tag == "Token")
-        {
-            AbilityPoints += 3;
-            Destroy(target.gameObject);
-        }
+        switch(target.tag) {
+            case "StrengthToken":
+                StrengthPoints += 3;
+                Destroy(target.gameObject);
+                break;
+            case "SpeedToken":
+                SpeedPoints += 3;
+                Destroy(target.gameObject);
+                break;
+            case "CunningToken":
+                CunningPoints += 3;
+                Destroy(target.gameObject);
+                break;
+            default:
+                break;
+        }  
     }
  
     protected virtual void OnMouseDown()
@@ -265,9 +283,9 @@ public abstract class Unit : MonoBehaviour
     /// Method indicates if it is possible to attack unit given as parameter, 
     /// from cell given as second parameter.
     /// </summary>
-    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, int range = 1, int cost = 0)
+    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, int range = 1, AbilityCost cost = null)
     {
-        if(cost > AbilityPoints) {
+        if(cost?.StrengthCost > StrengthPoints || cost?.SpeedCost > SpeedPoints || cost?.CunningCost > CunningPoints) {
             return false;
         }
 
@@ -294,7 +312,7 @@ public abstract class Unit : MonoBehaviour
         MarkAsAttacking(other);
         ActionPoints--;
         other.Defend(this, AttackFactor);
-        AbilityPoints -= AttackFactor;
+        StrengthPoints -= AttackFactor;
 
         if (ActionPoints == 0)
         {
@@ -358,7 +376,7 @@ public abstract class Unit : MonoBehaviour
 
         foreach (var cell in path)
         {
-            AbilityPoints ++;
+            StrengthPoints ++;
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
             while (transform.localPosition != destination_pos)
             {
@@ -406,7 +424,7 @@ public abstract class Unit : MonoBehaviour
                 }
             }
 
-            button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= AbilityPoints ;
+            button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= StrengthPoints ;
         }
     }
     

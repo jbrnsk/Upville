@@ -58,7 +58,7 @@ public abstract class CellGridState
     /// <summary>
     /// Method is called when performing melee attack.
     /// </summary>
-    public virtual void UnitAbility(int attackFactor, int attackRange, int cost)
+    public virtual void UnitAbility(int attackFactor, int attackRange, AbilityCost cost)
     {
     }
 

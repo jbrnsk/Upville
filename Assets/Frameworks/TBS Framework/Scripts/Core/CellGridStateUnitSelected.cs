@@ -7,7 +7,7 @@ class CellGridStateUnitSelected : CellGridState
     private Unit _unit;
     private HashSet<Cell> _pathsInRange;
     private List<Unit> _unitsInRange;
-    private GameObject _activeUnitMenu;
+    // private GameObject _activeUnitMenu;
 
     private Cell _unitCell;
 
@@ -117,7 +117,7 @@ class CellGridStateUnitSelected : CellGridState
         }   
     }
 
-    public override void UnitAbility(int attackFactor, int attackRange, int cost)
+    public override void UnitAbility(int attackFactor, int attackRange, AbilityCost cost)
     {
         foreach (var currentUnit in _cellGrid.Units)
         {
@@ -129,7 +129,9 @@ class CellGridStateUnitSelected : CellGridState
                 currentUnit.SetState(new UnitStateMarkedAsReachableEnemy(currentUnit));
                 _unitsInRange.Add(currentUnit);
                 _unit.AttackFactor = attackFactor;
-                _unit.AttackCost = cost;
+                _unit.StrengthCost = cost.StrengthCost;
+                _unit.SpeedCost = cost.SpeedCost;
+                _unit.CunningCost = cost.CunningCost;
             }
         }
     }

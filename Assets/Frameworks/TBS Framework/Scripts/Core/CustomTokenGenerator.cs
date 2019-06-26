@@ -6,10 +6,13 @@ using UnityEngine;
 
 public class CustomTokenGenerator : MonoBehaviour
 {
+    private const int V = 3;
     private System.Random _rnd = new System.Random();
     public int Amount;
     public Transform TokensParent;
-    public GameObject TokenPrefab;
+    public GameObject StrengthToken;
+    public GameObject SpeedToken;
+    public GameObject CunningToken;
     public CellGrid CellGrid;
     private RandomObstacleGenerator _obstacleGenerator;
 
@@ -56,8 +59,22 @@ public class CustomTokenGenerator : MonoBehaviour
         {
             var cell = freeCells.ElementAt(i);
             cell.GetComponent<Cell>().IsToken = true;
+            int rInt = _rnd.Next(0, 3);
+            GameObject token;
 
-            var token = Instantiate(TokenPrefab);
+            switch(rInt) {
+                case 0: 
+                    token = Instantiate(StrengthToken);
+                    break;
+                case 1:
+                    token = Instantiate(SpeedToken);
+                    break;
+                case 2:
+                default:
+                    token = Instantiate(CunningToken);
+                    break;
+            }
+
             token.transform.parent = TokensParent.transform;
 
             // Move new tokens and keep old in same position

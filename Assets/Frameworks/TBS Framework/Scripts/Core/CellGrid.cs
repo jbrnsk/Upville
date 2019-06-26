@@ -45,7 +45,7 @@ public class CellGrid : MonoBehaviour
     
     private CellGridState _cellGridState; //The grid delegates some of its behaviours to cellGridState object.
 
-    public GameObject ActiveUnitMenu;
+    // public GameObject ActiveUnitMenu;
 
     public CellGridState CellGridState
     {
@@ -267,8 +267,12 @@ public class CellGrid : MonoBehaviour
     public void UnitAbility(UnitAbility selectedUnitAbility)
     {
         int attackRange = selectedUnitAbility.AttackRange;
-        int attackFactor = selectedUnitAbility.AttackFactor;    
-        int cost = selectedUnitAbility.AbilityPointCost;  
+        int attackFactor = selectedUnitAbility.AttackFactor;   
+        AbilityCost cost = new AbilityCost(); 
+        cost.StrengthCost = selectedUnitAbility.AbilityPointCost;  
+        cost.SpeedCost = selectedUnitAbility.AbilityPointCost;  
+        cost.CunningCost = selectedUnitAbility.AbilityPointCost;
+
         _cellGridState.UnitAbility(attackFactor, attackRange, cost);
     }
 }
