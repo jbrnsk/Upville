@@ -13,9 +13,9 @@ class OtherGuiController : MonoBehaviour
 
     public Text InfoText;
     public Text HPText;
-    public Text AttackText;
-    public Text DefenceText;
-    public Text RangeText;
+    public Text StrengthText;
+    public Text SpeedText;
+    public Text CunningText;
 
     private void Awake()
     {
@@ -53,17 +53,17 @@ class OtherGuiController : MonoBehaviour
 
     private void OnUnitDehighlighted(object sender, EventArgs e)
     {
-        foreach (Transform marker in AttackText.transform)
+        foreach (Transform marker in StrengthText.transform)
         {
             Destroy(marker.gameObject);
         }
 
-        foreach (Transform marker in DefenceText.transform)
+        foreach (Transform marker in SpeedText.transform)
         {
             Destroy(marker.gameObject);
         }
 
-        foreach (Transform marker in RangeText.transform)
+        foreach (Transform marker in CunningText.transform)
         {
             Destroy(marker.gameObject);
         }
@@ -92,21 +92,21 @@ class OtherGuiController : MonoBehaviour
             Image AttackMarker;
             AttackMarker = Instantiate(i<attack ? FullMarkerImage : EmptyMarkerImage);
 
-                AttackMarker.rectTransform.SetParent(AttackText.rectTransform,false);
+                AttackMarker.rectTransform.SetParent(StrengthText.rectTransform,false);
                 AttackMarker.rectTransform.anchorMin = new Vector2(i * 0.14f,0.1f);
                 AttackMarker.rectTransform.anchorMax = new Vector2((i * 0.14f)+0.13f, 0.6f);
 
             Image DefenceMarker;
             DefenceMarker = Instantiate(i < defence ? FullMarkerImage : EmptyMarkerImage);
 
-                DefenceMarker.rectTransform.SetParent(DefenceText.rectTransform, false);
+                DefenceMarker.rectTransform.SetParent(SpeedText.rectTransform, false);
                 DefenceMarker.rectTransform.anchorMin = new Vector2(i * 0.14f, 0.1f);
                 DefenceMarker.rectTransform.anchorMax = new Vector2((i * 0.14f) + 0.13f, 0.6f);
 
             Image RangeMarker;
             RangeMarker = Instantiate(i < range ? FullMarkerImage : EmptyMarkerImage);
 
-                RangeMarker.rectTransform.SetParent(RangeText.rectTransform, false);
+                RangeMarker.rectTransform.SetParent(CunningText.rectTransform, false);
                 RangeMarker.rectTransform.anchorMin = new Vector2(i * 0.14f, 0.1f);
                 RangeMarker.rectTransform.anchorMax = new Vector2((i * 0.14f) + 0.13f, 0.6f);             
         }
