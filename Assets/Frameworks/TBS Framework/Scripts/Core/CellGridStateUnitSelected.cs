@@ -132,6 +132,8 @@ class CellGridStateUnitSelected : CellGridState
                 _unit.StrengthCost = cost.StrengthCost;
                 _unit.SpeedCost = cost.SpeedCost;
                 _unit.CunningCost = cost.CunningCost;
+            } else {
+                currentUnit.SetState(new UnitStateNormal(currentUnit));
             }
         }
     }

@@ -312,7 +312,9 @@ public abstract class Unit : MonoBehaviour
         MarkAsAttacking(other);
         ActionPoints--;
         other.Defend(this, AttackFactor);
-        StrengthPoints -= AttackFactor;
+        StrengthPoints -= StrengthCost;
+        SpeedPoints -= SpeedCost;
+        CunningPoints -= CunningCost;
 
         if (ActionPoints == 0)
         {
@@ -372,11 +374,9 @@ public abstract class Unit : MonoBehaviour
     {
         isMoving = true;
         path.Reverse();
-        // animator.SetBool("Idling", false);
 
         foreach (var cell in path)
         {
-            StrengthPoints ++;
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
             while (transform.localPosition != destination_pos)
             {
@@ -424,7 +424,7 @@ public abstract class Unit : MonoBehaviour
                 }
             }
 
-            button.interactable = hasUnitInRange && unitAbility.AbilityPointCost <= StrengthPoints ;
+            button.interactable = hasUnitInRange && unitAbility.StrengthPointCost <= StrengthPoints && unitAbility.SpeedPointCost <= SpeedPoints && unitAbility.CunningPointCost <= CunningPoints;
         }
     }
     

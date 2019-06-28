@@ -269,9 +269,9 @@ public class CellGrid : MonoBehaviour
         int attackRange = selectedUnitAbility.AttackRange;
         int attackFactor = selectedUnitAbility.AttackFactor;   
         AbilityCost cost = new AbilityCost(); 
-        cost.StrengthCost = selectedUnitAbility.AbilityPointCost;  
-        cost.SpeedCost = selectedUnitAbility.AbilityPointCost;  
-        cost.CunningCost = selectedUnitAbility.AbilityPointCost;
+        cost.StrengthCost = selectedUnitAbility.StrengthPointCost;  
+        cost.SpeedCost = selectedUnitAbility.SpeedPointCost;  
+        cost.CunningCost = selectedUnitAbility.CunningPointCost;
 
         _cellGridState.UnitAbility(attackFactor, attackRange, cost);
     }
