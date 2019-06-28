@@ -23,7 +23,6 @@ namespace MoonSharp.Interpreter.Tree
 			PrevLine = prevLine;
 		}
 
-
 		public override string ToString()
 		{
 			string tokenTypeString = (Type.ToString() + "                                                      ").Substring(0, 16);
