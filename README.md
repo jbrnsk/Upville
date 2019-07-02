@@ -2,7 +2,7 @@
 
 Welcome to Upville! This is a tactical turn-based game developed in Unity. 
 
-The GitHub repository is open-source. Feel free to download it, learn from it, and follow along our with development streams that generally occur Sunday, Tuesday, and Thursday nights at 8 PM EST:
+The GitHub repository is open-source. Feel free to download it, learn from it, and follow along with our development streams that generally occur on Twitch Sunday, Tuesday, and Thursday nights at 8 PM EST:
 
 https://www.twitch.tv/jvgamedev
 
