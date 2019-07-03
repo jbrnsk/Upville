@@ -174,7 +174,7 @@ public abstract class Unit : MonoBehaviour
  
     protected virtual void OnMouseDown()
     {
-        if (UnitClicked != null && Timer <= 0.0f)
+        if (UnitClicked != null && (PlayerNumber != 0 || Timer <= 0.0f))
             UnitClicked.Invoke(this, new EventArgs());
     }
     protected virtual void OnMouseEnter()
