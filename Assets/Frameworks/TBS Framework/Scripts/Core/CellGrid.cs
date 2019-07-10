@@ -79,6 +79,7 @@ public class CellGrid : MonoBehaviour
 
     public List<Player> Players { get; private set; }
     public List<Cell> Cells { get; private set; }
+    public List<Cell> CurrentPath;
     public List<Unit> Units { get; private set; }
 
     private void Start()

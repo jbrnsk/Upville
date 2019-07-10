@@ -129,6 +129,7 @@ public abstract class Unit : MonoBehaviour
 
     private static DijkstraPathfinding _pathfinder = new DijkstraPathfinding();
     private static IPathfinding _fallbackPathfinder = new AStarPathfinding();
+    private static IPathfinding _morallyObjectionablePathfinder = new BStarPathfinding();
 
     /// <summary>
     /// Method called after object instantiation to initialize fields etc. 
@@ -474,14 +475,20 @@ public abstract class Unit : MonoBehaviour
 
     public List<Cell> FindPath(List<Cell> cells, Cell destination)
     {
-        if(cachedPaths != null && cachedPaths.ContainsKey(destination))
-        {
-            return cachedPaths[destination];
+        if(cachedPaths != null && cachedPaths.ContainsKey(destination)) {
+            return _morallyObjectionablePathfinder.FindPath(GetGraphEdges(cells), Cell, destination, CellGrid.CurrentPath);
+        } else {
+            return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination, null);
         }
-        else
-        {
-            return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination);
-        }
+
+        // if(cachedPaths != null && cachedPaths.ContainsKey(destination))
+        // {
+        //     return cachedPaths[destination];
+        // }
+        // else
+        // {
+        //     return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination);
+        // }
     }
     /// <summary>
     /// Method returns graph representation of cell grid for pathfinding.

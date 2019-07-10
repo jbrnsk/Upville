@@ -31,8 +31,7 @@ class CellGridStateUnitSelected : CellGridState
             return;
         }
             
-        var path = _unit.FindPath(_cellGrid.Cells, cell);
-        _unit.Move(cell,path,_cellGrid);
+        _unit.Move(cell, _cellGrid.CurrentPath, _cellGrid);
         _cellGrid.CellGridState = new CellGridStateUnitSelected(_cellGrid, _unit);
     }
     public override void OnUnitClicked(Unit unit)
@@ -73,6 +72,7 @@ class CellGridStateUnitSelected : CellGridState
         {
             _cell.MarkAsPath();
         }
+        _cellGrid.CurrentPath = _currentPath;
     }
 
     public override void OnStateEnter()
