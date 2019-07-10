@@ -5,7 +5,7 @@
 /// </summary>
 class BreadthFirstSearch : IPathfinding
 {
-    public override List<T> FindPath<T>(Dictionary<T, Dictionary<T, int>> edges, T originNode, T destinationNode, List<T> prevPath)
+    public override List<T> FindPath<T>(Dictionary<T, Dictionary<T, int>> edges, T originNode, T destinationNode, List<T> prevPath, int MovementPoints)
     {
         Queue<T> frontier = new Queue<T>();
         frontier.Enqueue(originNode);

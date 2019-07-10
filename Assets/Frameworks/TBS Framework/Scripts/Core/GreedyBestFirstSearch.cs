@@ -5,7 +5,7 @@
 /// </summary>
 class GreedyBestFirstSearch : IPathfinding
 {
-    public override List<T> FindPath<T>(Dictionary<T, Dictionary<T, int>> edges, T originNode, T destinationNode, List<T> prevPath)
+    public override List<T> FindPath<T>(Dictionary<T, Dictionary<T, int>> edges, T originNode, T destinationNode, List<T> prevPath, int MovementPoints)
     {
         IPriorityQueue<T> frontier = new HeapPriorityQueue<T>();
         frontier.Enqueue(originNode,0);

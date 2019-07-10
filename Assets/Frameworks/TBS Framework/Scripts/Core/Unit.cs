@@ -476,9 +476,9 @@ public abstract class Unit : MonoBehaviour
     public List<Cell> FindPath(List<Cell> cells, Cell destination)
     {
         if(cachedPaths != null && cachedPaths.ContainsKey(destination)) {
-            return _morallyObjectionablePathfinder.FindPath(GetGraphEdges(cells), Cell, destination, CellGrid.CurrentPath);
+            return _morallyObjectionablePathfinder.FindPath(GetGraphEdges(cells), Cell, destination, CellGrid.CurrentPath, MovementPoints);
         } else {
-            return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination, null);
+            return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination, null, 0);
         }
 
         // if(cachedPaths != null && cachedPaths.ContainsKey(destination))
