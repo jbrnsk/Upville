@@ -53,7 +53,7 @@ class CellGridStateUnitSelected : CellGridState
     }
     public override void OnCellDeselected(Cell cell)
     {
-        base.OnCellDeselected(cell);
+        // base.OnCellDeselected(cell);
         foreach(var _cell in _currentPath)
         {
             if (_pathsInRange.Contains(_cell))
@@ -65,13 +65,22 @@ class CellGridStateUnitSelected : CellGridState
     public override void OnCellSelected(Cell cell)
     {
         base.OnCellSelected(cell);
+        List<Cell> _prevPath = new List<Cell>(_currentPath);
+        foreach (var _cell in _prevPath) {
+            _cell.MarkAsReachable();
+        }
+
         if (!_pathsInRange.Contains(cell)) return;
 
         _currentPath = _unit.FindPath(_cellGrid.Cells, cell);
+
         foreach (var _cell in _currentPath)
         {
             _cell.MarkAsPath();
         }
+
+        Debug.Log(_currentPath.Count);
+
         _cellGrid.CurrentPath = _currentPath;
     }
 

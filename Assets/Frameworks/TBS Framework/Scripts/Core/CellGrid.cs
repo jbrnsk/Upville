@@ -151,6 +151,18 @@ public class CellGrid : MonoBehaviour
     }
 
     void Update(){
+        RaycastHit hit;
+        var range = 100;
+        var camera = Camera.main;
+        var mask = 1 << LayerMask.NameToLayer("Cell");
+
+        if (Input.GetButton("Fire1") && Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit, range, mask)){
+            var script = hit.transform.GetComponent<MyHexagon>();
+            if (script != null) {
+                script.EnterCell();
+            }
+        }
+
         if(IsPaused) {
             return;
         }

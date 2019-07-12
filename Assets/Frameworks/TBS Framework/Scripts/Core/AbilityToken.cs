@@ -34,21 +34,4 @@ public abstract class AbilityToken : MonoBehaviour
     /// It requires a collider on the cell game object to work.
     /// </summary>
     public event EventHandler CellDehighlighted;
-    // protected virtual void OnMouseEnter()
-    // {
-    //     MyHexagon cell = (MyHexagon)CellObject.GetComponent("MyHexagon");
-    //     cell.CellClicked += cellGrid.OnCellClicked;
-    //     cell.CellHighlighted += OnCellHighlighted;
-    //     cell.CellDehighlighted += OnCellDehighlighted;
-    // }
-    // protected virtual void OnMouseExit()
-    // {    
-    //     if (cell.CellDehighlighted != null)
-    //         cell.CellDehighlighted.Invoke(this, new EventArgs());
-    // }
-    // void OnMouseDown()
-    // {
-    //     if (cell.CellClicked != null)
-    //         cell.CellClicked.Invoke(this, new EventArgs());
-    // }
 }

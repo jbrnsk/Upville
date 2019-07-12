@@ -172,7 +172,6 @@ public abstract class Unit : MonoBehaviour
                 break;
         }  
     }
- 
     protected virtual void OnMouseDown()
     {
         if (UnitClicked != null && (PlayerNumber != 0 || Timer <= 0.0f))
@@ -385,6 +384,8 @@ public abstract class Unit : MonoBehaviour
                 yield return 0;
             }
         }
+
+        cellGrid.CurrentPath = new List<Cell>();
         
         if(!ActionMenu) {
             isMoving = false;
@@ -480,15 +481,6 @@ public abstract class Unit : MonoBehaviour
         } else {
             return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination, null, 0);
         }
-
-        // if(cachedPaths != null && cachedPaths.ContainsKey(destination))
-        // {
-        //     return cachedPaths[destination];
-        // }
-        // else
-        // {
-        //     return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination);
-        // }
     }
     /// <summary>
     /// Method returns graph representation of cell grid for pathfinding.

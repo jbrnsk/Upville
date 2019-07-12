@@ -44,16 +44,12 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// </summary>
     public event EventHandler CellDehighlighted;
 
-    protected virtual void OnMouseEnter()
+    public virtual void EnterCell()
     {
         if (CellHighlighted != null)
             CellHighlighted.Invoke(this, new EventArgs());
     }
-    protected virtual void OnMouseExit()
-    {    
-        if (CellDehighlighted != null)
-            CellDehighlighted.Invoke(this, new EventArgs());
-    }
+
     void OnMouseDown()
     {
         if (CellClicked != null)
