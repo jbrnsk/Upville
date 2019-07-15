@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GuiController : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class GuiController : MonoBehaviour
 
     private void OnGameEnded(object sender, EventArgs e)
     {
-        InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
+        SceneManager.LoadScene(0);
     }
     private void OnTurnEnded(object sender, EventArgs e)
     {
