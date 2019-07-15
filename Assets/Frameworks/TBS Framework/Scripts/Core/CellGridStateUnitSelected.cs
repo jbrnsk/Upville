@@ -79,8 +79,6 @@ class CellGridStateUnitSelected : CellGridState
             _cell.MarkAsPath();
         }
 
-        Debug.Log(_currentPath.Count);
-
         _cellGrid.CurrentPath = _currentPath;
     }
 

@@ -30,7 +30,6 @@ public class NaiveAiPlayer : Player
     {
         _cellGrid.EndTurn(); 
         yield return 0;
-        // Debug.Log("AI Player is playing");
         // var myUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(PlayerNumber)).ToList();
         // foreach (var unit in myUnits.OrderByDescending(u => u.Cell.GetNeighbours(_cellGrid.Cells).FindAll(u.IsCellTraversable).Count))
         // {
@@ -42,7 +41,6 @@ public class NaiveAiPlayer : Player
         //     yield return MakeAiUnitDecision(myUnits, unit);
         // }    
         // _cellGrid.EndTurn();   
-        // Debug.Log("END OF AI");
     }
 
     private IEnumerator MakeAiUnitDecision(List<Unit> myUnits, Unit unit) {

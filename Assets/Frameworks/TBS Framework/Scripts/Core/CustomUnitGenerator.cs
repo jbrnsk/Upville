@@ -57,7 +57,6 @@ public class CustomUnitGenerator : MonoBehaviour, IUnitGenerator
         foreach(Transform unit in UnitsParent)
         {
             var closestCell = cells.OrderBy(h => Math.Abs((h.transform.position - unit.transform.position).magnitude)).First();
-            // Debug.Log();
 
             if (!closestCell.GetComponent<Cell>().IsTaken)
             {
