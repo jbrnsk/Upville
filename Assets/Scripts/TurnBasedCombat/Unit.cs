@@ -142,7 +142,7 @@ public abstract class Unit : MonoBehaviour
 
         CellGrid = (CellGrid)GameObject.Find("CellGrid").GetComponent("CellGrid");
 
-        animator = GetComponentInChildren<Animator>();//need this...
+        animator = GetComponentInChildren<Animator>();
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = MovementPoints;
@@ -372,6 +372,7 @@ public abstract class Unit : MonoBehaviour
     }
     protected virtual IEnumerator MovementAnimation(List<Cell> path, CellGrid cellGrid)
     {
+        animator.SetBool("Idling", false);
         isMoving = true;
         path.Reverse();
 
@@ -395,9 +396,8 @@ public abstract class Unit : MonoBehaviour
         // Set ability buttons as interactable based on whether or not enemies in range. 
         DetermineAvailableActions(cellGrid);
 
-        // animator.SetBool("Idling", true);
+        animator.SetBool("Idling", true);
         isMoving = false;
-        MarkAsFinished();
     }
 
 

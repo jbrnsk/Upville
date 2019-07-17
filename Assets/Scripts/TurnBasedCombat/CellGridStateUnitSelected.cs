@@ -103,12 +103,6 @@ class CellGridStateUnitSelected : CellGridState
         {
             cell.MarkAsReachable();
         }
-
-        if (_unit.ActionPoints <= 0) return;
-        
-        if (_unitCell.GetNeighbours(_cellGrid.Cells).FindAll(c => c.MovementCost <= _unit.MovementPoints).Count == 0 
-            && _unitsInRange.Count == 0)
-            _unit.SetState(new UnitStateMarkedAsFinished(_unit));
     }
     public override void OnStateExit()
     {
