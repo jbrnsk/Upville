@@ -115,6 +115,18 @@ public abstract class Unit : MonoBehaviour
     /// The move timer game object.
     /// </summary>
     public GameObject MoveTimer;
+    /// <summary>
+    /// Whether unit is charging abilities.
+    /// </summary>
+    public bool IsCharging;
+    /// <summary>
+    /// Time to charge more powa!
+    /// </summary>
+    public float InitialChargeTime = 3.0f;
+    /// <summary>
+    /// Time to charge more powa!
+    /// </summary>
+    public float ChargeTimer;
 
     /// <summary>
     /// Indicates the player that the unit belongs to. 
@@ -151,21 +163,22 @@ public abstract class Unit : MonoBehaviour
         SpeedPoints = SpeedPointsMaximum;
         CunningPoints = CunningPointsMaximum;
         Timer = ActionSpeed;
+        ChargeTimer = InitialChargeTime;
     }
 
     private void OnTriggerEnter(Collider target)
     {
         switch(target.tag) {
             case "StrengthToken":
-                StrengthPoints += 3;
+                IncrementAbilityPoint("Strength", 3);
                 Destroy(target.gameObject);
                 break;
             case "SpeedToken":
-                SpeedPoints += 3;
+                IncrementAbilityPoint("Speed", 3);
                 Destroy(target.gameObject);
                 break;
             case "CunningToken":
-                CunningPoints += 3;
+                IncrementAbilityPoint("Cunning", 3);
                 Destroy(target.gameObject);
                 break;
             default:
@@ -235,6 +248,7 @@ public abstract class Unit : MonoBehaviour
     /// Method is called when units HP drops below 1.
     /// </summary>
     public virtual void UpdateTimerBar() {
+        Timer -= Time.deltaTime;
         var timerGraphic = MoveTimer?.GetComponent<Image>();
 
         if (timerGraphic != null)
@@ -242,6 +256,51 @@ public abstract class Unit : MonoBehaviour
             timerGraphic.transform.localScale = new Vector3((float)((float)Timer / (float)ActionSpeed), 1, 1);
             timerGraphic.color = Color.Lerp(Color.blue, Color.red,
                 (float)((float)Timer / (float)ActionSpeed));
+        }
+    }
+
+    /// <summary>
+    /// Method is called when units HP drops below 1.
+    /// </summary>
+    public virtual void ChargeAbilities() {
+        ChargeTimer -= Time.deltaTime;
+
+        if (ChargeTimer <= 0) {
+            IncrementAbilityPoint("Strength", 1);
+            IncrementAbilityPoint("Speed", 1);
+            IncrementAbilityPoint("Cunning", 1);
+            ChargeTimer = InitialChargeTime;
+        }
+    }
+
+       /// <summary>
+    /// Method is called when units HP drops below 1.
+    /// </summary>
+    public virtual void IncrementAbilityPoint(string _ability, int _points) {
+        switch(_ability) {
+            case "Strength":
+                StrengthPoints += _points;
+
+                if(StrengthPoints >= StrengthPointsMaximum) {
+                    StrengthPoints = StrengthPointsMaximum;
+                }
+                break;          
+            case "Speed":
+                SpeedPoints += _points;
+
+                if(SpeedPoints >= SpeedPointsMaximum) {
+                    SpeedPoints = SpeedPointsMaximum;
+                }
+                break;
+            case "Cunning":
+                CunningPoints += _points;
+
+                if(CunningPoints >= CunningPointsMaximum) {
+                    CunningPoints = CunningPointsMaximum;
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -273,6 +332,7 @@ public abstract class Unit : MonoBehaviour
     {
         ActionMenu.SetActive(false);
         CellGrid.IsPaused = false;
+        IsCharging = ActionPoints > 0 ? true : false;
 
         SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)

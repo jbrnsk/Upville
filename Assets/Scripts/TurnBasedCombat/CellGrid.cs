@@ -176,8 +176,11 @@ public class CellGrid : MonoBehaviour
 
         foreach(Unit unit in Units) {
             if(!unit.IsReady) {
-                unit.Timer -= Time.deltaTime;
                 unit.UpdateTimerBar();
+            }
+
+            if(unit.IsCharging) {
+                unit.ChargeAbilities();
             }
 
             if(unit.Timer <= 0.0f && !unit.IsReady) {
