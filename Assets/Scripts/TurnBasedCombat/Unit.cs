@@ -379,16 +379,27 @@ public abstract class Unit : MonoBehaviour
         foreach (var cell in path)
         {
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
+
+            Vector2 targetDir = new Vector2(cell.transform.localPosition.x, cell.transform.localPosition.z) - new Vector2(transform.localPosition.x, transform.localPosition.z);
+            
+            float angle = Vector2.Angle(targetDir, new Vector2(0,1));
+            float changeAngle = targetDir.x < 0 ? 180 - angle : angle - 180;
+            transform.localRotation = Quaternion.Euler(0, changeAngle, 0);
+
             while (transform.localPosition != destination_pos)
             {
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination_pos, Time.deltaTime * MovementSpeed);
+                
                 yield return 0;
             }
         }
+        // Reorient to camera
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
 
         cellGrid.CurrentPath = new List<Cell>();
         
         if(!ActionMenu) {
+            animator.SetBool("Idling", true);
             isMoving = false;
             yield break;
         }
