@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 class MyHexagon : Hexagon
 {
     private Renderer hexagonRenderer;
     private Renderer outlineRenderer;
+    private bool pulsing;
 
     public void Awake()
     {
@@ -24,8 +26,52 @@ class MyHexagon : Hexagon
 
     public override void MarkAsReachable()
     {
-        SetColor(hexagonRenderer, Color.yellow);
+        Color standardColor;
+        Color highlightColor;
+
+        switch (AbilityPointType)
+        {
+            case "Strength":
+                standardColor = new Color(0.25f, 0.9f, 0.25f);
+                highlightColor = new Color(0f, 0.5f, 0f);
+                break;
+            case "Speed":
+                standardColor = new Color(0.9f, 0.25f, 0.9f);
+                highlightColor = new Color(0.5f, 0f, 0.5f);
+                break;
+            case "Cunning":
+            default:
+                standardColor = new Color(0.9f, 0.9f, 0.25f);
+                highlightColor = new Color(0.5f, 0.5f, 0f);
+                break;
+        }
+
+        StartCoroutine(Pulse(standardColor, highlightColor));
     }
+
+    /// <summary>
+    /// A coroutine method that executes all commands in the Block. Only one running instance of each Block is permitted.
+    /// </summary>
+    /// <param name="commandIndex">Index of command to start execution at</param>
+    /// <param name="onComplete">Delegate function to call when execution completes</param>
+    public virtual IEnumerator Pulse(Color standardColor, Color highlightColor)
+    {
+        float size = 0.0f;
+        pulsing = true;
+
+        while (pulsing == true)
+        {
+            size += Time.deltaTime;
+            hexagonRenderer.material.color = Color.Lerp(standardColor, highlightColor, Mathf.PingPong(size, 0.75f));
+
+            yield return null;
+        }
+
+        SetColor(hexagonRenderer, standardColor);
+
+        yield break;
+    }
+
     public override void MarkAsPath()
     {
         SetColor(hexagonRenderer, Color.green); ;
@@ -36,10 +82,7 @@ class MyHexagon : Hexagon
     }
     public override void RandomizeAbilityPointType()
     {
-        System.Random rnd = new System.Random();
-        int randomAbility = rnd.Next(1, 4);
-
-        switch (randomAbility)
+        switch (Random.Range(0, 4))
         {
             case 1:
                 MarkAsStrength();
@@ -56,17 +99,17 @@ class MyHexagon : Hexagon
     public override void MarkAsStrength()
     {
         AbilityPointType = "Strength";
-        SetColor(hexagonRenderer, new Color(1.0f, 0.5f, 0.5f));
+        SetColor(hexagonRenderer, new Color(0.25f, 0.9f, 0.25f));
     }
     public override void MarkAsSpeed()
     {
         AbilityPointType = "Speed";
-        SetColor(hexagonRenderer, new Color(1.0f, 1.0f, 0.5f));
+        SetColor(hexagonRenderer, new Color(0.9f, 0.25f, 0.9f));
     }
     public override void MarkAsCunning()
     {
         AbilityPointType = "Cunning";
-        SetColor(hexagonRenderer, new Color(0.66f, 0.66f, 1.0f));
+        SetColor(hexagonRenderer, new Color(0.9f, 0.9f, 0.25f));
     }
     public override void MarkAsMovementCell()
     {
@@ -91,6 +134,7 @@ class MyHexagon : Hexagon
         }
 
         SetColor(outlineRenderer, Color.black);
+        pulsing = false;
     }
 
     private void SetColor(Renderer renderer, Color color)

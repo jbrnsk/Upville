@@ -115,7 +115,9 @@ public class CellGrid : MonoBehaviour
         {
             var cell = transform.GetChild(i).gameObject.GetComponent<Cell>();
             if (cell != null)
+            {
                 Cells.Add(cell);
+            }
             else
                 Debug.LogError("Invalid object in cells parent game object");
         }
@@ -125,6 +127,7 @@ public class CellGrid : MonoBehaviour
             cell.CellClicked += OnCellClicked;
             cell.CellHighlighted += OnCellHighlighted;
             cell.CellDehighlighted += OnCellDehighlighted;
+            // cell.RandomizeAbilityPointType();
             cell.GetComponent<Cell>().GetNeighbours(Cells);
         }
 
