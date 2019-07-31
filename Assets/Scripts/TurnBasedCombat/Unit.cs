@@ -168,7 +168,8 @@ public abstract class Unit : MonoBehaviour
 
     private void OnTriggerEnter(Collider target)
     {
-        switch(target.tag) {
+        switch (target.tag)
+        {
             case "StrengthToken":
                 IncrementAbilityPoint("Strength", 3);
                 Destroy(target.gameObject);
@@ -183,7 +184,7 @@ public abstract class Unit : MonoBehaviour
                 break;
             default:
                 break;
-        }  
+        }
     }
     protected virtual void OnMouseDown()
     {
@@ -206,7 +207,8 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnTurnStart()
     {
-        if(!IsReady) {
+        if (!IsReady)
+        {
             return;
         }
         MovementPoints = TotalMovementPoints;
@@ -247,7 +249,8 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Method is called when units HP drops below 1.
     /// </summary>
-    public virtual void UpdateTimerBar() {
+    public virtual void UpdateTimerBar()
+    {
         Timer -= Time.deltaTime;
         var timerGraphic = MoveTimer?.GetComponent<Image>();
 
@@ -262,10 +265,12 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Method is called when units HP drops below 1.
     /// </summary>
-    public virtual void ChargeAbilities() {
+    public virtual void ChargeAbilities()
+    {
         ChargeTimer -= Time.deltaTime;
 
-        if (ChargeTimer <= 0) {
+        if (ChargeTimer <= 0)
+        {
             IncrementAbilityPoint("Strength", 1);
             IncrementAbilityPoint("Speed", 1);
             IncrementAbilityPoint("Cunning", 1);
@@ -273,29 +278,34 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-       /// <summary>
+    /// <summary>
     /// Method is called when units HP drops below 1.
     /// </summary>
-    public virtual void IncrementAbilityPoint(string _ability, int _points) {
-        switch(_ability) {
+    public virtual void IncrementAbilityPoint(string _ability, int _points)
+    {
+        switch (_ability)
+        {
             case "Strength":
                 StrengthPoints += _points;
 
-                if(StrengthPoints >= StrengthPointsMaximum) {
+                if (StrengthPoints >= StrengthPointsMaximum)
+                {
                     StrengthPoints = StrengthPointsMaximum;
                 }
-                break;          
+                break;
             case "Speed":
                 SpeedPoints += _points;
 
-                if(SpeedPoints >= SpeedPointsMaximum) {
+                if (SpeedPoints >= SpeedPointsMaximum)
+                {
                     SpeedPoints = SpeedPointsMaximum;
                 }
                 break;
             case "Cunning":
                 CunningPoints += _points;
 
-                if(CunningPoints >= CunningPointsMaximum) {
+                if (CunningPoints >= CunningPointsMaximum)
+                {
                     CunningPoints = CunningPointsMaximum;
                 }
                 break;
@@ -309,7 +319,8 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
-        if(!IsReady) {
+        if (!IsReady)
+        {
             return;
         }
 
@@ -323,7 +334,7 @@ public abstract class Unit : MonoBehaviour
         {
             UnitSelected.Invoke(this, new EventArgs());
         }
-            
+
     }
     /// <summary>
     /// Method is called when unit is deselected.
@@ -345,7 +356,8 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, int range = 1, AbilityCost cost = null)
     {
-        if(cost?.StrengthCost > StrengthPoints || cost?.SpeedCost > SpeedPoints || cost?.CunningCost > CunningPoints) {
+        if (cost?.StrengthCost > StrengthPoints || cost?.SpeedCost > SpeedPoints || cost?.CunningCost > CunningPoints)
+        {
             return false;
         }
 
@@ -380,7 +392,7 @@ public abstract class Unit : MonoBehaviour
         {
             SetState(new UnitStateMarkedAsFinished(this));
             MovementPoints = 0;
-        }  
+        }
     }
 
     /// <summary>
@@ -391,7 +403,7 @@ public abstract class Unit : MonoBehaviour
         MarkAsDefending(other);
         //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. 
         //If result is below 1, it is set to 1. This behaviour can be overridden in derived classes.
-        HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);  
+        HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);
         if (UnitAttacked != null)
             UnitAttacked.Invoke(this, new AttackEventArgs(other, this, damage));
 
@@ -426,8 +438,9 @@ public abstract class Unit : MonoBehaviour
         else
             transform.position = Cell.transform.position;
 
-        if (UnitMoved != null){
-            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));   
+        if (UnitMoved != null)
+        {
+            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));
         }
     }
     protected virtual IEnumerator MovementAnimation(List<Cell> path, CellGrid cellGrid)
@@ -441,24 +454,30 @@ public abstract class Unit : MonoBehaviour
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
 
             Vector2 targetDir = new Vector2(cell.transform.localPosition.x, cell.transform.localPosition.z) - new Vector2(transform.localPosition.x, transform.localPosition.z);
-            
-            float angle = Vector2.Angle(targetDir, new Vector2(0,1));
+
+            float angle = Vector2.Angle(targetDir, new Vector2(0, 1));
             float changeAngle = targetDir.x < 0 ? 180 - angle : angle - 180;
             transform.localRotation = Quaternion.Euler(0, changeAngle, 0);
+
+            IncrementAbilityPoint(cell.AbilityPointType, 1);
+            // cell.MarkAsMovementCell();
 
             while (transform.localPosition != destination_pos)
             {
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination_pos, Time.deltaTime * MovementSpeed);
-                
+
                 yield return 0;
             }
+
+            cell.RandomizeAbilityPointType();
         }
         // Reorient to camera
         transform.localRotation = Quaternion.Euler(0, 0, 0);
 
         cellGrid.CurrentPath = new List<Cell>();
-        
-        if(!ActionMenu) {
+
+        if (!ActionMenu)
+        {
             animator.SetBool("Idling", true);
             isMoving = false;
             yield break;
@@ -475,10 +494,11 @@ public abstract class Unit : MonoBehaviour
     ///<summary>
     /// Method sets available actions on action menu based on enemies in range and current ability points.
     /// </summary>
-    public void DetermineAvailableActions(CellGrid cellGrid) {
+    public void DetermineAvailableActions(CellGrid cellGrid)
+    {
         GameObject cards = ActionMenu.transform.Find("Cards").gameObject;
 
-        foreach(Transform child in cards.transform)
+        foreach (Transform child in cards.transform)
         {
             UnitAbility unitAbility = (UnitAbility)child.gameObject.GetComponent("UnitAbility");
             Button button = (Button)child.gameObject.GetComponent("Button");
@@ -489,7 +509,7 @@ public abstract class Unit : MonoBehaviour
             {
                 if (currentUnit.PlayerNumber.Equals(PlayerNumber))
                     continue;
-            
+
                 if (IsUnitAttackable(currentUnit, Cell, attackRange))
                 {
                     hasUnitInRange = true;
@@ -500,7 +520,7 @@ public abstract class Unit : MonoBehaviour
             button.interactable = hasUnitInRange && unitAbility.StrengthPointCost <= StrengthPoints && unitAbility.SpeedPointCost <= SpeedPoints && unitAbility.CunningPointCost <= CunningPoints;
         }
     }
-    
+
     ///<summary>
     /// Method indicates if unit is capable of moving to cell given as parameter.
     /// </summary>
@@ -521,7 +541,7 @@ public abstract class Unit : MonoBehaviour
     public HashSet<Cell> GetAvailableDestinations(List<Cell> cells)
     {
         cachedPaths = new Dictionary<Cell, List<Cell>>();
-        
+
         var paths = cachePaths(cells);
         foreach (var key in paths.Keys)
         {
@@ -547,9 +567,12 @@ public abstract class Unit : MonoBehaviour
 
     public List<Cell> FindPath(List<Cell> cells, Cell destination)
     {
-        if(cachedPaths != null && cachedPaths.ContainsKey(destination)) {
+        if (cachedPaths != null && cachedPaths.ContainsKey(destination))
+        {
             return _morallyObjectionablePathfinder.FindPath(GetGraphEdges(cells), Cell, destination, CellGrid.CurrentPath, MovementPoints);
-        } else {
+        }
+        else
+        {
             return _fallbackPathfinder.FindPath(GetGraphEdges(cells), Cell, destination, null, 0);
         }
     }

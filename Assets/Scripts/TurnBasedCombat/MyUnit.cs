@@ -85,7 +85,7 @@ public class MyUnit : Unit
 
     public override void MarkAsFriendly()
     {
-        SetHighlighterColor(new Color(0.8f,1,0.8f));
+        SetHighlighterColor(new Color(0.8f, 1, 0.8f));
     }
     public override void MarkAsReachableEnemy()
     {
@@ -93,7 +93,7 @@ public class MyUnit : Unit
     }
     public override void MarkAsSelected()
     {
-        SetHighlighterColor(new Color(0,1,0));
+        SetHighlighterColor(new Color(0, 1, 0));
     }
     public override void MarkAsFinished()
     {
@@ -110,7 +110,7 @@ public class MyUnit : Unit
 
     private void UpdateHpBar()
     {
-         var healthGraphic = HealthBar?.GetComponent<Image>();
+        var healthGraphic = HealthBar?.GetComponent<Image>();
 
         if (healthGraphic != null)
         {

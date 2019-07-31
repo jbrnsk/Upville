@@ -44,6 +44,8 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// </summary>
     public event EventHandler CellDehighlighted;
 
+    public string AbilityPointType;
+
     public virtual void EnterCell()
     {
         if (CellHighlighted != null)
@@ -84,6 +86,26 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
     /// </summary>
     public abstract void MarkAsHighlighted();
+    /// <summary>
+    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
+    /// </summary>
+    public abstract void MarkAsMovementCell();
+    /// <summary>
+    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
+    /// </summary>
+    public abstract void MarkAsStrength();
+    /// <summary>
+    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
+    /// </summary>
+    public abstract void MarkAsSpeed();
+    /// <summary>
+    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
+    /// </summary>
+    public abstract void MarkAsCunning();
+    /// <summary>
+    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
+    /// </summary>
+    public abstract void RandomizeAbilityPointType();
     /// <summary>
     /// Method returns the cell to its base appearance.
     /// </summary>

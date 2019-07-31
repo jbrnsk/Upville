@@ -42,7 +42,7 @@ public class CellGrid : MonoBehaviour
     /// UnitAdded event is invoked each time AddUnit method is called.
     /// </summary>
     public event EventHandler<UnitCreatedEventArgs> UnitAdded;
-    
+
     private CellGridState _cellGridState; //The grid delegates some of its behaviours to cellGridState object.
 
     // public GameObject ActiveUnitMenu;
@@ -54,15 +54,15 @@ public class CellGrid : MonoBehaviour
             return _cellGridState;
         }
         set
-        { 
-            if(_cellGridState != null)
+        {
+            if (_cellGridState != null)
                 _cellGridState.OnStateExit();
             _cellGridState = value;
             _cellGridState.OnStateEnter();
         }
     }
 
-    private CustomTokenGenerator TokenGenerator; //The grid delegates some of its behaviours to cellGridState object.
+    // private CustomTokenGenerator TokenGenerator; //The grid delegates some of its behaviours to cellGridState object.
 
     public int NumberOfPlayers { get; private set; }
 
@@ -140,50 +140,59 @@ public class CellGrid : MonoBehaviour
         else
             Debug.LogError("No IUnitGenerator script attached to cell grid");
 
-        TokenGenerator = (CustomTokenGenerator)this.gameObject.GetComponent("CustomTokenGenerator");
-        if (unitGenerator != null)
-        {
-            StartCoroutine(TokenGenerator.SpawnTokens());
-        }
-        else
-            Debug.LogError("No CustomTokenGenerator attached to cell grid");
-        
+        // TokenGenerator = (CustomTokenGenerator)this.gameObject.GetComponent("CustomTokenGenerator");
+        // if (unitGenerator != null)
+        // {
+        //     StartCoroutine(TokenGenerator.SpawnTokens());
+        // }
+        // else
+        //     Debug.LogError("No CustomTokenGenerator attached to cell grid");
+
     }
 
-    void Update(){
+    void Update()
+    {
         RaycastHit hit;
         var range = 100;
         var camera = Camera.main;
         var mask = 1 << LayerMask.NameToLayer("Cell");
 
-        if (Input.GetButton("Fire1") && Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit, range, mask)){
+        if (Input.GetButton("Fire1") && Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit, range, mask))
+        {
             var script = hit.transform.GetComponent<MyHexagon>();
-            if (script != null) {
+            if (script != null)
+            {
                 script.EnterCell();
             }
         }
 
-        if(IsPaused) {
+        if (IsPaused)
+        {
             return;
         }
 
-        TokenGenerator.Timer -= Time.deltaTime;
+        // TokenGenerator.Timer -= Time.deltaTime;
 
-        if( TokenGenerator.Timer <= 0){
-            StartCoroutine(TokenGenerator.SpawnTokens());
-            TokenGenerator.Timer = CustomTokenGenerator.InitialTimer;
-        }
+        // if (TokenGenerator.Timer <= 0)
+        // {
+        //     StartCoroutine(TokenGenerator.SpawnTokens());
+        //     TokenGenerator.Timer = CustomTokenGenerator.InitialTimer;
+        // }
 
-        foreach(Unit unit in Units) {
-            if(!unit.IsReady) {
+        foreach (Unit unit in Units)
+        {
+            if (!unit.IsReady)
+            {
                 unit.UpdateTimerBar();
             }
 
-            if(unit.IsCharging) {
+            if (unit.IsCharging)
+            {
                 unit.ChargeAbilities();
             }
 
-            if(unit.Timer <= 0.0f && !unit.IsReady) {
+            if (unit.Timer <= 0.0f && !unit.IsReady)
+            {
                 var myUnits = Units.FindAll(u => u.PlayerNumber.Equals(unit.PlayerNumber)).ToList();
 
                 unit.Activate(this, myUnits);
@@ -198,7 +207,7 @@ public class CellGrid : MonoBehaviour
     private void OnCellHighlighted(object sender, EventArgs e)
     {
         CellGridState.OnCellSelected(sender as Cell);
-    } 
+    }
     private void OnCellClicked(object sender, EventArgs e)
     {
         CellGridState.OnCellClicked(sender as Cell);
@@ -214,7 +223,7 @@ public class CellGrid : MonoBehaviour
         var totalPlayersAlive = Units.Select(u => u.PlayerNumber).Distinct().ToList(); //Checking if the game is over
         if (totalPlayersAlive.Count == 1)
         {
-            if(GameEnded != null)
+            if (GameEnded != null)
                 GameEnded.Invoke(this, new EventArgs());
         }
     }
@@ -228,8 +237,8 @@ public class CellGrid : MonoBehaviour
         unit.GetComponent<Unit>().UnitClicked += OnUnitClicked;
         unit.GetComponent<Unit>().UnitDestroyed += OnUnitDestroyed;
 
-        if(UnitAdded != null)
-            UnitAdded.Invoke(this, new UnitCreatedEventArgs(unit)); 
+        if (UnitAdded != null)
+            UnitAdded.Invoke(this, new UnitCreatedEventArgs(unit));
     }
 
     /// <summary>
@@ -237,7 +246,7 @@ public class CellGrid : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        if(GameStarted != null)
+        if (GameStarted != null)
             GameStarted.Invoke(this, new EventArgs());
 
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
@@ -259,14 +268,14 @@ public class CellGrid : MonoBehaviour
         CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
         while (Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).Count == 0)
         {
-            CurrentPlayerNumber = (CurrentPlayerNumber + 1)%NumberOfPlayers;
+            CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
         }//Skipping players that are defeated.
 
         if (TurnEnded != null)
             TurnEnded.Invoke(this, new EventArgs());
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
-        Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);     
+        Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
     }
 
     /// <summary>
@@ -283,10 +292,10 @@ public class CellGrid : MonoBehaviour
     public void UnitAbility(UnitAbility selectedUnitAbility)
     {
         int attackRange = selectedUnitAbility.AttackRange;
-        int attackFactor = selectedUnitAbility.AttackFactor;   
-        AbilityCost cost = new AbilityCost(); 
-        cost.StrengthCost = selectedUnitAbility.StrengthPointCost;  
-        cost.SpeedCost = selectedUnitAbility.SpeedPointCost;  
+        int attackFactor = selectedUnitAbility.AttackFactor;
+        AbilityCost cost = new AbilityCost();
+        cost.StrengthCost = selectedUnitAbility.StrengthPointCost;
+        cost.SpeedCost = selectedUnitAbility.SpeedPointCost;
         cost.CunningCost = selectedUnitAbility.CunningPointCost;
 
         _cellGridState.UnitAbility(attackFactor, attackRange, cost);
