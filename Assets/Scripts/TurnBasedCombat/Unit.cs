@@ -460,7 +460,6 @@ public abstract class Unit : MonoBehaviour
             transform.localRotation = Quaternion.Euler(0, changeAngle, 0);
 
             IncrementAbilityPoint(cell.AbilityPointType, 1);
-            // cell.MarkAsMovementCell();
 
             while (transform.localPosition != destination_pos)
             {

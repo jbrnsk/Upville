@@ -24,6 +24,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// </summary>
     public bool IsToken;
     /// <summary>
+    /// Indicates if cell is a camera space.
+    /// </summary>
+    public bool IsCamera;
+    /// <summary>
     /// Cost of moving through the cell.
     /// </summary>
     public int MovementCost;
@@ -102,6 +106,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
     /// </summary>
     public abstract void MarkAsCunning();
+    /// <summary>
+    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
+    /// </summary>
+    public abstract void MarkAsCamera();
     /// <summary>
     /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
     /// </summary>

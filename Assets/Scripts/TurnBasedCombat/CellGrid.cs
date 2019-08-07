@@ -62,7 +62,7 @@ public class CellGrid : MonoBehaviour
         }
     }
 
-    // private CustomTokenGenerator TokenGenerator; //The grid delegates some of its behaviours to cellGridState object.
+    private CameraSpaceGenerator CameraGenerator; //The grid delegates some of its behaviours to cellGridState object.
 
     public int NumberOfPlayers { get; private set; }
 
@@ -127,7 +127,6 @@ public class CellGrid : MonoBehaviour
             cell.CellClicked += OnCellClicked;
             cell.CellHighlighted += OnCellHighlighted;
             cell.CellDehighlighted += OnCellDehighlighted;
-            // cell.RandomizeAbilityPointType();
             cell.GetComponent<Cell>().GetNeighbours(Cells);
         }
 
@@ -143,13 +142,13 @@ public class CellGrid : MonoBehaviour
         else
             Debug.LogError("No IUnitGenerator script attached to cell grid");
 
-        // TokenGenerator = (CustomTokenGenerator)this.gameObject.GetComponent("CustomTokenGenerator");
-        // if (unitGenerator != null)
-        // {
-        //     StartCoroutine(TokenGenerator.SpawnTokens());
-        // }
-        // else
-        //     Debug.LogError("No CustomTokenGenerator attached to cell grid");
+        CameraGenerator = (CameraSpaceGenerator)this.gameObject.GetComponent("CameraSpaceGenerator");
+        if (unitGenerator != null)
+        {
+            StartCoroutine(CameraGenerator.SpawnCameraSpaces());
+        }
+        else
+            Debug.LogError("No CustomTokenGenerator attached to cell grid");
 
     }
 
@@ -174,13 +173,13 @@ public class CellGrid : MonoBehaviour
             return;
         }
 
-        // TokenGenerator.Timer -= Time.deltaTime;
+        CameraGenerator.Timer -= Time.deltaTime;
 
-        // if (TokenGenerator.Timer <= 0)
-        // {
-        //     StartCoroutine(TokenGenerator.SpawnTokens());
-        //     TokenGenerator.Timer = CustomTokenGenerator.InitialTimer;
-        // }
+        if (CameraGenerator.Timer <= 0)
+        {
+            StartCoroutine(CameraGenerator.SpawnCameraSpaces());
+            CameraGenerator.Timer = CustomTokenGenerator.InitialTimer;
+        }
 
         foreach (Unit unit in Units)
         {

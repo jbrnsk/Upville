@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 class MyHexagon : Hexagon
 {
     private Renderer hexagonRenderer;
     private Renderer outlineRenderer;
     private bool pulsing;
+    public GameObject CameraToken;
+    private Color strengthColor = new Color(0.25f, 0.9f, 0.25f);
+    private Color speedColor = new Color(0.9f, 0.25f, 0.9f);
+    private Color cunningColor = new Color(0.9f, 0.9f, 0.25f);
 
     public void Awake()
     {
@@ -32,17 +37,21 @@ class MyHexagon : Hexagon
         switch (AbilityPointType)
         {
             case "Strength":
-                standardColor = new Color(0.25f, 0.9f, 0.25f);
+                standardColor = strengthColor;
                 highlightColor = new Color(0f, 0.5f, 0f);
                 break;
             case "Speed":
-                standardColor = new Color(0.9f, 0.25f, 0.9f);
+                standardColor = speedColor;
                 highlightColor = new Color(0.5f, 0f, 0.5f);
                 break;
             case "Cunning":
-            default:
-                standardColor = new Color(0.9f, 0.9f, 0.25f);
+                standardColor = cunningColor;
                 highlightColor = new Color(0.5f, 0.5f, 0f);
+                break;
+            case "Camera":
+            default:
+                standardColor = new Color(0.25f, 0.25f, 0.25f);
+                highlightColor = new Color(0f, 0f, 0f);
                 break;
         }
 
@@ -99,20 +108,64 @@ class MyHexagon : Hexagon
     public override void MarkAsStrength()
     {
         AbilityPointType = "Strength";
-        SetColor(hexagonRenderer, new Color(0.25f, 0.9f, 0.25f));
+        SetColor(hexagonRenderer, strengthColor);
     }
     public override void MarkAsSpeed()
     {
         AbilityPointType = "Speed";
-        SetColor(hexagonRenderer, new Color(0.9f, 0.25f, 0.9f));
+        SetColor(hexagonRenderer, speedColor);
     }
     public override void MarkAsCunning()
     {
         AbilityPointType = "Cunning";
-        SetColor(hexagonRenderer, new Color(0.9f, 0.9f, 0.25f));
+        SetColor(hexagonRenderer, cunningColor);
+    }
+    public override void MarkAsCamera()
+    {
+        AbilityPointType = "Camera";
+        SetColor(hexagonRenderer, new Color(0.25f, 0.25f, 0.25f));
+
+        ColorTokenFactory();
+    }
+
+    private void ColorTokenFactory()
+    {
+        List<int> colorList = new List<int> { Random.Range(0, 3), Random.Range(0, 3), Random.Range(0, 3) };
+
+        for (int i = 0; i < colorList.Count; i++)
+        {
+            var colorInt = colorList[i];
+            GameObject token = NewToken(i, colorInt);
+        }
+    }
+
+    private GameObject NewToken(int index, int colorInt)
+    {
+        List<Color> colorMap = new List<Color> { strengthColor, speedColor, cunningColor };
+        GameObject newToken = Instantiate(CameraToken, this.transform.position, Quaternion.identity, this.transform);
+        Renderer renderer = newToken.GetComponent<Renderer>();
+
+        SetColor(renderer, colorMap[colorInt]);
+
+        switch (index)
+        {
+            case 0:
+                newToken.transform.position = this.gameObject.transform.position + new Vector3(-0.1f, this.GetCellDimensions().y - 0.1f, 0.15f);
+                break;
+            case 1:
+                newToken.transform.position = this.gameObject.transform.position + new Vector3(0.15f, this.GetCellDimensions().y - 0.1f, 0f);
+                break;
+            case 2:
+            default:
+                newToken.transform.position = this.gameObject.transform.position + new Vector3(-0.1f, this.GetCellDimensions().y - 0.1f, -0.15f);
+                break;
+        }
+
+        return newToken;
     }
     public override void MarkAsMovementCell()
     {
+        AbilityPointType = "Camera";
         SetColor(hexagonRenderer, Color.grey);
     }
     public override void UnMark()
@@ -127,6 +180,9 @@ class MyHexagon : Hexagon
                 break;
             case "Cunning":
                 MarkAsCunning();
+                break;
+            case "Camera":
+                MarkAsCamera();
                 break;
             default:
                 SetColor(hexagonRenderer, Color.white);
