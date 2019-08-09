@@ -7,13 +7,28 @@ class MyHexagon : Hexagon
     private Renderer hexagonRenderer;
     private Renderer outlineRenderer;
     private bool pulsing;
+    private bool isPath;
     public GameObject CameraToken;
+    public CellGrid CellGrid;
+    public List<string> SuperCameraRequirement;
+    private List<Color> colorMap;
+    private List<string> abilityMap;
     private Color strengthColor = new Color(0.25f, 0.9f, 0.25f);
+    private Color strengthPulseColor = new Color(0f, 0.5f, 0f);
+    private Color strengthHighlightColor = new Color(0.5f, 1f, 0.5f);
     private Color speedColor = new Color(0.9f, 0.25f, 0.9f);
+    private Color speedPulseColor = new Color(0.5f, 0f, 0.5f);
+    private Color speedHighlightColor = new Color(1f, 0.5f, 1f);
     private Color cunningColor = new Color(0.9f, 0.9f, 0.25f);
+    private Color cunningPulseColor = new Color(0.5f, 0.5f, 0f);
+    private Color cunningHighlightColor = new Color(1f, 1f, 0.5f);
+    private Color cameraColor = new Color(0.25f, 0.25f, 0.25f);
+    private Color cameraPulseColor = new Color(0f, 0f, 0f);
 
     public void Awake()
     {
+        colorMap = new List<Color> { strengthColor, speedColor, cunningColor };
+        abilityMap = new List<string> { "Strength", "Speed", "Cunning" };
         hexagonRenderer = GetComponent<Renderer>();
 
         var outline = transform.Find("Outline");
@@ -38,23 +53,24 @@ class MyHexagon : Hexagon
         {
             case "Strength":
                 standardColor = strengthColor;
-                highlightColor = new Color(0f, 0.5f, 0f);
+                highlightColor = strengthPulseColor;
                 break;
             case "Speed":
                 standardColor = speedColor;
-                highlightColor = new Color(0.5f, 0f, 0.5f);
+                highlightColor = speedPulseColor;
                 break;
             case "Cunning":
                 standardColor = cunningColor;
-                highlightColor = new Color(0.5f, 0.5f, 0f);
+                highlightColor = cunningPulseColor;
                 break;
             case "Camera":
             default:
-                standardColor = new Color(0.25f, 0.25f, 0.25f);
-                highlightColor = new Color(0f, 0f, 0f);
+                standardColor = cameraColor;
+                highlightColor = cameraPulseColor;
                 break;
         }
 
+        isPath = false;
         StartCoroutine(Pulse(standardColor, highlightColor));
     }
 
@@ -65,13 +81,11 @@ class MyHexagon : Hexagon
     /// <param name="onComplete">Delegate function to call when execution completes</param>
     public virtual IEnumerator Pulse(Color standardColor, Color highlightColor)
     {
-        float size = 0.0f;
         pulsing = true;
 
-        while (pulsing == true)
+        while (pulsing == true && !isPath)
         {
-            size += Time.deltaTime;
-            hexagonRenderer.material.color = Color.Lerp(standardColor, highlightColor, Mathf.PingPong(size, 0.75f));
+            hexagonRenderer.material.color = Color.Lerp(standardColor, highlightColor, Mathf.PingPong(CellGrid.PulseTimer, 0.75f));
 
             yield return null;
         }
@@ -83,7 +97,21 @@ class MyHexagon : Hexagon
 
     public override void MarkAsPath()
     {
-        SetColor(hexagonRenderer, Color.green); ;
+        isPath = true;
+
+        switch (AbilityPointType)
+        {
+            case "Strength":
+                SetColor(hexagonRenderer, strengthHighlightColor);
+                break;
+            case "Speed":
+                SetColor(hexagonRenderer, Color.blue);
+                break;
+            case "Cunning":
+            default:
+                SetColor(hexagonRenderer, Color.white);
+                break;
+        }
     }
     public override void MarkAsHighlighted()
     {
@@ -122,9 +150,13 @@ class MyHexagon : Hexagon
     }
     public override void MarkAsCamera()
     {
-        AbilityPointType = "Camera";
-        SetColor(hexagonRenderer, new Color(0.25f, 0.25f, 0.25f));
+        SetColor(hexagonRenderer, cameraColor);
+        if (AbilityPointType == "Camera")
+        {
+            return;
+        }
 
+        AbilityPointType = "Camera";
         ColorTokenFactory();
     }
 
@@ -132,16 +164,17 @@ class MyHexagon : Hexagon
     {
         List<int> colorList = new List<int> { Random.Range(0, 3), Random.Range(0, 3), Random.Range(0, 3) };
 
+
         for (int i = 0; i < colorList.Count; i++)
         {
             var colorInt = colorList[i];
             GameObject token = NewToken(i, colorInt);
+            SuperCameraRequirement.Add(abilityMap[colorInt]);
         }
     }
 
     private GameObject NewToken(int index, int colorInt)
     {
-        List<Color> colorMap = new List<Color> { strengthColor, speedColor, cunningColor };
         GameObject newToken = Instantiate(CameraToken, this.transform.position, Quaternion.identity, this.transform);
         Renderer renderer = newToken.GetComponent<Renderer>();
 
@@ -163,11 +196,7 @@ class MyHexagon : Hexagon
 
         return newToken;
     }
-    public override void MarkAsMovementCell()
-    {
-        AbilityPointType = "Camera";
-        SetColor(hexagonRenderer, Color.grey);
-    }
+
     public override void UnMark()
     {
         switch (AbilityPointType)

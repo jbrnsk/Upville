@@ -36,7 +36,10 @@ public class CellGrid : MonoBehaviour
     /// </summary>
     public bool IsPaused;
 
-
+    /// <summary>
+    /// Pulse time tracking.
+    /// </summary>
+    public float PulseTimer;
 
     /// <summary>
     /// UnitAdded event is invoked each time AddUnit method is called.
@@ -154,6 +157,8 @@ public class CellGrid : MonoBehaviour
 
     void Update()
     {
+        PulseTimer += Time.deltaTime;
+
         RaycastHit hit;
         var range = 100;
         var camera = Camera.main;

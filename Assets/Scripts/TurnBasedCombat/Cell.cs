@@ -93,10 +93,6 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// <summary>
     /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
     /// </summary>
-    public abstract void MarkAsMovementCell();
-    /// <summary>
-    /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.
-    /// </summary>
     public abstract void MarkAsStrength();
     /// <summary>
     /// Method marks the cell as highlighted. It gets called when the mouse is over the cell.

@@ -279,7 +279,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Method is called when units HP drops below 1.
+    /// Method when incrementing character ability points.
     /// </summary>
     public virtual void IncrementAbilityPoint(string _ability, int _points)
     {
@@ -311,6 +311,56 @@ public abstract class Unit : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Method called when entering camera square.
+    /// </summary>
+    public virtual void EnterCameraSquare(Cell _cell, List<Cell> _path, List<string> _apPath)
+    {
+        if (_path.IndexOf(_cell) == _path.Count - 1)
+        {
+            CheckCameraMatch(_cell, _apPath);
+        }
+
+        foreach (Transform child in _cell.transform)
+        {
+            if (child.tag == "Token")
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+
+        MyHexagon _hexScript = (MyHexagon)_cell.gameObject.GetComponent("MyHexagon");
+        _hexScript.SuperCameraRequirement = new List<string> { };
+    }
+
+    /// <summary>
+    /// Method called when entering camera square.
+    /// </summary>
+    public virtual void CheckCameraMatch(Cell _cell, List<string> _apPath)
+    {
+        List<string> _abilityList = new List<string> { };
+        for (int i = 0; i < _apPath.Count - 1; i++)
+        {
+            _abilityList.Add(_apPath[i]);
+        }
+
+        MyHexagon _hexScript = (MyHexagon)_cell.gameObject.GetComponent("MyHexagon");
+
+        var _cameraReq = _hexScript.SuperCameraRequirement;
+
+        _cameraReq.Sort();
+        _abilityList.Sort();
+
+        if (_abilityList.Count == _cameraReq.Count && _abilityList.SequenceEqual(_cameraReq))
+        {
+            Debug.Log("YOU ARE AMAZING AT THIS GAME!");
+
+            IncrementAbilityPoint("Strength", StrengthPointsMaximum);
+            IncrementAbilityPoint("Speed", SpeedPointsMaximum);
+            IncrementAbilityPoint("Cunning", CunningPointsMaximum);
         }
     }
 
@@ -449,6 +499,15 @@ public abstract class Unit : MonoBehaviour
         isMoving = true;
         path.Reverse();
 
+        List<string> _abilityPointPath = new List<string>(
+            path.Select(_cell =>
+                {
+                    MyHexagon _hexScript = (MyHexagon)_cell.gameObject.GetComponent("MyHexagon");
+
+                    return _hexScript.AbilityPointType;
+                })
+                );
+
         foreach (var cell in path)
         {
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
@@ -459,7 +518,14 @@ public abstract class Unit : MonoBehaviour
             float changeAngle = targetDir.x < 0 ? 180 - angle : angle - 180;
             transform.localRotation = Quaternion.Euler(0, changeAngle, 0);
 
-            IncrementAbilityPoint(cell.AbilityPointType, 1);
+            if (cell.AbilityPointType != "Camera")
+            {
+                IncrementAbilityPoint(cell.AbilityPointType, 1);
+            }
+            else
+            {
+                EnterCameraSquare(cell, path, _abilityPointPath);
+            }
 
             while (transform.localPosition != destination_pos)
             {
