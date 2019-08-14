@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GuiController : MonoBehaviour
 {
@@ -10,15 +10,17 @@ public class GuiController : MonoBehaviour
     public Image UnitImage;
     public Text InfoText;
     public Text StatsText;
+    public GameObject StyleMeter;
 
     void Awake()
     {
         UnitImage.color = Color.gray;
 
         CellGrid.GameStarted += OnGameStarted;
-        CellGrid.TurnEnded += OnTurnEnded;   
+        CellGrid.TurnEnded += OnTurnEnded;
         CellGrid.GameEnded += OnGameEnded;
         CellGrid.UnitAdded += OnUnitAdded;
+        CellGrid.StyleModified += OnStyleModified;
     }
 
     private void OnGameStarted(object sender, EventArgs e)
@@ -29,7 +31,9 @@ public class GuiController : MonoBehaviour
             cell.GetComponent<Cell>().CellDehighlighted += OnCellDehighlighted;
         }
 
-        OnTurnEnded(sender,e);
+        UpdateStyleMeter();
+
+        OnTurnEnded(sender, e);
     }
 
     private void OnGameEnded(object sender, EventArgs e)
@@ -38,7 +42,7 @@ public class GuiController : MonoBehaviour
     }
     private void OnTurnEnded(object sender, EventArgs e)
     {
-        InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber +1);
+        InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1);
     }
     private void OnCellDehighlighted(object sender, EventArgs e)
     {
@@ -67,7 +71,7 @@ public class GuiController : MonoBehaviour
     private void OnUnitHighlighted(object sender, EventArgs e)
     {
         var unit = sender as MyUnit;
-        StatsText.text = unit.UnitName + "\nHit Points: " + unit.HitPoints +"/"+unit.TotalHitPoints + "\nStrength: " + unit.StrengthPoints + "\nSpeed: " + unit.SpeedPoints + "\nCunning: " + unit.CunningPoints;
+        StatsText.text = unit.UnitName + "\nHit Points: " + unit.HitPoints + "/" + unit.TotalHitPoints + "\nStrength: " + unit.StrengthPoints + "\nSpeed: " + unit.SpeedPoints + "\nCunning: " + unit.CunningPoints;
         UnitImage.color = unit.PlayerColor;
 
     }
@@ -84,6 +88,25 @@ public class GuiController : MonoBehaviour
     }
     public void RestartLevel()
     {
-        Application.LoadLevel(Application.loadedLevel);
+        SceneManager.LoadScene(Application.loadedLevel);
+    }
+
+    private void OnStyleModified(object sender, StyleIncreaseEventArguments e)
+    {
+        CellGrid.StylePoints += e.StylePointIncrease;
+
+        UpdateStyleMeter();
+    }
+
+    private void UpdateStyleMeter()
+    {
+        var styleGraphic = StyleMeter?.GetComponent<Image>();
+
+        if (styleGraphic != null)
+        {
+            styleGraphic.transform.localScale = new Vector3((float)((float)CellGrid.StylePoints / (float)CellGrid.MaxStylePoints), 1, 1);
+            styleGraphic.color = Color.Lerp(Color.red, Color.green,
+                (float)((float)CellGrid.StylePoints / (float)CellGrid.MaxStylePoints));
+        }
     }
 }

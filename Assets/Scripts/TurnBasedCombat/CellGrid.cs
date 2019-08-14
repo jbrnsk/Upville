@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// CellGrid class keeps track of the game, stores cells, units and players objects. It starts the game and makes turn transitions. 
@@ -30,6 +30,10 @@ public class CellGrid : MonoBehaviour
     /// Turn ended event is invoked at the end of each turn.
     /// </summary>
     public event EventHandler TurnEnded;
+    /// <summary>
+    /// Style modified event invoked when style is modified.
+    /// </summary>
+    public event EventHandler<StyleIncreaseEventArguments> StyleModified;
 
     /// <summary>
     /// Whether or not game is paused.
@@ -40,6 +44,16 @@ public class CellGrid : MonoBehaviour
     /// Pulse time tracking.
     /// </summary>
     public float PulseTimer;
+
+    /// <summary>
+    /// Player team style points.
+    /// </summary>
+    public int StylePoints;
+
+    /// <summary>
+    /// Player max style points.
+    /// </summary>
+    public int MaxStylePoints;
 
     /// <summary>
     /// UnitAdded event is invoked each time AddUnit method is called.
@@ -276,7 +290,7 @@ public class CellGrid : MonoBehaviour
         while (Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).Count == 0)
         {
             CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumberOfPlayers;
-        }//Skipping players that are defeated.
+        } //Skipping players that are defeated.
 
         if (TurnEnded != null)
             TurnEnded.Invoke(this, new EventArgs());
@@ -291,6 +305,18 @@ public class CellGrid : MonoBehaviour
     public void Taunt()
     {
         _cellGridState.Taunt();
+    }
+
+    /// <summary>
+    /// Method shows available units for melee attack.
+    /// </summary>
+    public void ModifyStyle(int stylepointModifier)
+    {
+        StyleIncreaseEventArguments args = new StyleIncreaseEventArguments();
+        args.StylePointIncrease = stylepointModifier;
+
+        if (StyleModified != null)
+            StyleModified.Invoke(this, args);
     }
 
     /// <summary>

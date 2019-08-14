@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -232,9 +232,7 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Method is called when unit becomes available to activate.
     /// </summary>
-    public virtual void Activate(CellGrid _cellGrid, List<Unit> myUnits)
-    {
-    }
+    public virtual void Activate(CellGrid _cellGrid, List<Unit> myUnits) { }
 
     /// <summary>
     /// Method is called when units HP drops below 1.
@@ -361,6 +359,8 @@ public abstract class Unit : MonoBehaviour
             IncrementAbilityPoint("Strength", StrengthPointsMaximum);
             IncrementAbilityPoint("Speed", SpeedPointsMaximum);
             IncrementAbilityPoint("Cunning", CunningPointsMaximum);
+
+            CellGrid.ModifyStyle(10);
         }
     }
 
@@ -501,12 +501,12 @@ public abstract class Unit : MonoBehaviour
 
         List<string> _abilityPointPath = new List<string>(
             path.Select(_cell =>
-                {
-                    MyHexagon _hexScript = (MyHexagon)_cell.gameObject.GetComponent("MyHexagon");
+            {
+                MyHexagon _hexScript = (MyHexagon)_cell.gameObject.GetComponent("MyHexagon");
 
-                    return _hexScript.AbilityPointType;
-                })
-                );
+                return _hexScript.AbilityPointType;
+            })
+        );
 
         foreach (var cell in path)
         {
@@ -554,7 +554,6 @@ public abstract class Unit : MonoBehaviour
         animator.SetBool("Idling", true);
         isMoving = false;
     }
-
 
     ///<summary>
     /// Method sets available actions on action menu based on enemies in range and current ability points.
